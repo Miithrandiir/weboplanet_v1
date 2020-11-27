@@ -1,0 +1,29 @@
+main > .box > .content {
+  padding: 10px;
+  min-height: 90%;
+}
+main > .box > .content > table {
+  border-spacing: 0;
+  width: 100%;
+}
+main > .box > .content > table > tbody > tr > td {
+  text-align: center;
+  padding: 5px;
+}
+
+.warning {
+  background: #f39c12 !important;
+}
+
+.danger {
+  background: #e74c3c !important;
+}
+
+.success > td, .danger > td, .warning > td {
+  color: white;
+}
+.success > td > a, .danger > td > a, .warning > td > a {
+  color: white;
+}
+
+/*# sourceMappingURL=dashboard.eval.css.map */

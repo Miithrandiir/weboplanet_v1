@@ -1,0 +1,101 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.compte.css') }}"/>
+{% endblock %}
+
+{% block body %}
+<main>
+    <section class="box">
+        <header>
+            <h2>Mon profil</h2>
+        </header>
+        <div class="content">
+            <div class="stats">
+                <h3>Statistiques</h3>
+
+                <div class="someStats">
+                    <div class="info-box success">
+                        <i class="fas fa-file-alt"></i>
+                        <div class="desc">
+                            <span>{{ testsDone }}</span>
+                            <p> Exam terminés</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box success">
+                        <i class="fas fa-poll"></i>
+                        <div class="desc">
+                            <span>{{ moyenne|default('Aucune note') }}</span>
+                            <p> Moyenne des notes</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box warning">
+                        <i class="fas fa-question"></i>
+                        <div class="desc">
+                            <span>0</span>
+                            <p> Entrainement effectué</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="desc">
+                            <span>{{ missedTests }}</span>
+                            <p> Interrogation manquées</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Mes informations</h3>
+
+                <div class="recap">
+
+                    <div class="form-group">
+                        <label>
+                            Prénom:
+                            <input type="text" value="{{ app.user.firstname }}" disabled/>
+                        </label>
+
+                        <label>
+                            Nom:
+                            <input type="text" value="{{ app.user.lastname }}" disabled/>
+                        </label>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            E-Mail:
+                            <input type="email" value="{{ app.user.email }}" disabled/>
+                        </label>
+
+                        {% if app.user.degree != null %}
+                        <label>
+                            Diplôme préparé:
+                            <input type="text" value="{{ app.user.degree.name }}" disabled/>
+                        </label>
+                        {% else %}
+                        <label>
+                            Rôle:
+                            <input type="text" value="{{ app.user.roles[0] }}" disabled/>
+                        </label>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <h3>Mes ACTIONS</h3>
+
+                <div class="actions">
+                    <a href="{{ path('dashboard_account_change_email') }}">Modifier mon adresse E-Mail</a>
+                    <a href="{{ path('dashboard_account_change_password') }}">Modifier mon mot de passe</a>
+                </div>
+                <div class="actions solo">
+                    <a href="">Demander toutes mes informations me concernant (Procédure selon la RGPD)</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

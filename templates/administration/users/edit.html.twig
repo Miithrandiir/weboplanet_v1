@@ -1,0 +1,217 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Édition d'un utilisateurs{% endblock %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Utilisateurs
+                <small>édition</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Utilisateurs</a></li>
+                <li class="active">édition</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Édition de {{ user.name }}</h3>
+                </div>
+                <div class="box-body">
+                    {{ form_start(form) }}
+
+                    {% if form_errors(form) %}
+                        <div class="info-box danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="desc">
+                                <p>{{ form_errors(form) }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form_label(form.firstname) }}
+                            {{ form_widget(form.firstname, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.lastname) }}
+                            {{ form_widget(form.lastname, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.username) }}
+                            {{ form_widget(form.username, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.roles) }}
+                            {{ form_widget(form.roles, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.diploma) }}
+                            {{ form_widget(form.diploma, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                        <button href="" class="btn btn-warning pull-right" id="sendPassword" data-userid="{{ user.id }}">Envoyer un nouveau mot de passe</button>
+                    </div>
+
+                    <!-- /.box-body -->
+                    {{ form_end(form) }}
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Groupes dans lequel l'utilisateur est inscrit</h3>
+                    <button href="" class="pull-right btn btn-success addGroup"  data-toggle="addGroup" data-target="#addGroup" >Ajouter dans un groupe</button>
+                </div>
+                <div class="box-body">
+                    <table id="groupOfUser" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom du groupe</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for usersGroup in user.usersGroups %}
+
+                            {% for group in usersGroup.groupID %}
+                                <tr>
+                                    <td>{{ group.id }}</td>
+                                    <td>{{ group.name }}</td>
+                                    <td>
+                                        <button class="btn btn-danger deleteGroup" data-group="{{ group.id }}" ><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+            <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div class="modal modal-default fade" id="addGroup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Ajout dans un groupe</h4>
+                </div>
+                {{ form_start(groupForm) }}
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        {{ form_label(groupForm.groups) }}
+                        {{ form_widget(groupForm.groups, {'attr': {'class' : 'form-control select2', 'style':'width:100%'}}) }}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
+                    <button class="btn btn-success" id="groupAddForm" data-dismiss="modal">Envoyer</button>
+                </div>
+                {{ form_end(groupForm) }}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+    <script>
+        $(function (){
+
+            //Initialize Select2 Elements
+            $('.select2').select2();
+
+            $('.addGroup').click(function (e) {
+                e.preventDefault();
+               $('#addGroup').modal();
+            });
+
+            $('#sendPassword').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url : "{{ path('administration_user_new_password') }}",
+                    method: "post",
+                    data : {userId: $(this).data('userid')}
+                }).done(function (msg) {
+                })
+            });
+
+            $('#groupAddForm').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: "{{ path('administration_user_add_to_group') }}",
+                    method: 'post',
+                    data: {userId: {{ user.id}}, groupId: $("#form_groups").val()}
+                }).done(function (msg) {
+                    if(msg !== []) {
+                        let data = JSON.parse(msg);
+                        for (let i = 0; i < data.length; i++) {
+                            $("#groupOfUser").append("<tr>" +
+                                "<td>" + data[i][0] + "</td>" +
+                                "<td>" + data[i][1] + "</td>" +
+                                "<td><button class=\"btn btn-danger deleteGroup\" data-group=\""+data[i][0]+"\" ><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></button></td>" +
+                                "</tr>");
+                        }
+                    }
+                })
+            });
+
+            $('body').on('click','.deleteGroup',function (e) {
+                e.preventDefault();
+                let object = $(this);
+
+                $.ajax({
+                    url: "{{ path('administration_user_remove_from_group') }}",
+                    method: 'post',
+                    data: {userId: {{ user.id }}, groupId: $(this).data('group') }
+                }).done(function (msg) {
+                    if(msg === true) {
+                        object.parent().parent().remove();
+                    }
+                })
+            })
+
+        });
+    </script>
+{% endblock %}

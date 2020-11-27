@@ -1,0 +1,61 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block body %}
+<main>
+
+    {% for groupNote in notes %}
+    <section class="box">
+        <header>
+            <h2>{{ groupNote['name'] }}</h2>
+        </header>
+        <div class="content">
+            <div class="notes">
+                {% for note in groupNote['note'] %}
+                        <div class="note">
+                            <h4>{{ note['name'] }}</h4>
+                            <p class="bien">{{ note['note'].note }}/{{ note['note'].evaluation.TotalNote }}</p>
+                            <p class="remarque">
+                                {% if note['note'].remarque != null %}
+                                {{ note['note'].remarque }}
+                                {% else %}
+                                    Aucune remarque
+                                {% endif %}
+                            </p>
+                        </div>
+                {% else %}
+                    <div class="alert success">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Infos :</h2>
+                        <p>Vous n'avez pas encore de note pour ce groupe</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <footer>
+            <p>Moyenne des notes : </p>
+            <p class="note">{{ groupNote['moyenne'] }}
+                {% if groupNote['moyenne']|is_numeric %}/20{% endif %}</p>
+        </footer>
+    </section>
+        {% else %}
+    <section class="box">
+        <header>
+            <h2>Aucune note</h2>
+        </header>
+        <div class="content">
+            <div class="alert warning">
+                <h2><i class="fas fa-exclamation-triangle"></i> Infos :</h2>
+                <p>Vous ne possédez actuellement aucune note !</p>
+            </div>
+        </div>
+        <footer>
+
+        </footer>
+    </section>
+    {% endfor %}
+
+</main>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.notes.css') }}"/>
+{% endblock %}

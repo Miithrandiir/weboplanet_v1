@@ -1,0 +1,116 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}
+    Entrainement
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.eval.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <main>
+        <section class="box">
+            <header>
+                <h2>RECHERCHER</h2>
+            </header>
+            <div class="content">
+                <div class="search">
+                    <form method="POST">
+                        {{ form_start(form) }}
+                        <div class="form-group">
+                            <label for="cours">
+                                {{ form_label(form.course) }}
+                            </label>
+                            {{ form_widget(form.course) }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="chap">
+                                {{ form_label(form.chapter) }}
+                            </label>
+                            <select id="form_chapter" name="form[chapter]">
+                                {% for course in courses %}
+                                    {% for chapter in course.chapters %}
+                                        <option value="{{ chapter.id }}" data-course="{{ course.id }}">{{ chapter.name }}</option>
+                                    {% endfor %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="qcmSearch">Je recherche </button>
+                        </div>
+
+                        <input type="hidden" id="form__token" name="form[_token]" value="{{ form._token.vars.value }}">
+                        {{ form_end(form, {'render_rest': false}) }}
+
+                    </form>
+                </div>
+            </div>
+            {% if training != null %}
+                <div class="content">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for eval in training %}
+                            <tr>
+                                <td>{{ eval.id }}</td>
+                                <td>{{ eval.name }}</td>
+                                <td><a href="{{ path('training_do', {id: eval.id}) }}">Je commence</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        //At Startup
+        $(function () {
+            let course = $('#form_course').val();
+            let first = true;
+            $("#form_chapter option").each(function () {
+                if($(this).val() !== course) {
+                    $(this).attr('selected', false);
+                    $(this).hide();
+                } else {
+                    if(first) {
+                        $(this).attr('selected', true);
+                        first=false;
+                    }
+                    $(this).show();
+                }
+            })
+        });
+
+
+        $("#form_course").change(function () {
+            let course = $(this).val();
+            let first = true;
+           $("#form_chapter option").each(function () {
+               if($(this).val() !== course) {
+                   $(this).attr('selected', false);
+                   $(this).hide();
+               } else {
+                   if(first) {
+                       $(this).attr('selected', true);
+                       first=false;
+                   }
+                   $(this).show();
+               }
+           })
+        });
+    </script>
+{% endblock %}

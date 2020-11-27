@@ -1,0 +1,14 @@
+main > .box > header > h2 {
+  text-transform: uppercase;
+  color: #2c3e50;
+}
+main > .box > .content {
+  padding: 10px;
+  min-height: 90%;
+}
+main > .box > .content > form > button {
+  display: block;
+  margin: 10px auto;
+}
+
+/*# sourceMappingURL=dashboard.aide.css.map */

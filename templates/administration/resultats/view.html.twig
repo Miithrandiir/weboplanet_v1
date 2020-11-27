@@ -1,0 +1,223 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Édition d'un diplôme{% endblock %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Résultat
+                <small>récap</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Résultat</a></li>
+                <li class="active">récap</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            {% set areCheck = true %}
+
+            {% for group in evaluations.evaluationsGroups %}
+                {% if group.hasBeenCheck == false %}
+                    {% set areCheck = false %}
+                {% endif %}
+            {% endfor %}
+
+            {% if areCheck == false %}
+                <div class="callout callout-warning">
+                    <h4><i class="fas fa-warning"></i> Attention</h4>
+
+                    <p>Veuillez prendre en compte que tous les groupes non pas fini l'évaluation !</p>
+                </div>
+            {% endif %}
+
+
+            <div class="callout callout-success" id="checkResult">
+                <h4><i class="fas fa-tasks"></i> Résultat de la vérification</h4>
+
+                <p id="checkResultText">Les données de l'évaluation semblent cohérents !</p>
+                <ul id="checkResultList">
+
+                </ul>
+            </div>
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Récapitulatif</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-8">
+                            <div class="form-group">
+                                <label>Nom de l'évaluation</label>
+                                <input type="text" class="form-control" value="{{ evaluations.name }}" disabled/>
+
+                                <div class="row row-no-gutters">
+                                    <div class="col-xs-6">
+                                        <h3 style="text-align: center;">Détails :</h3>
+
+                                        <div style="padding: 5px;">
+                                            <table class="table table-bordered table-striped" style="margin-right: -5px;">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align: center;">Nom de participant</th>
+                                                        <th style="text-align: center;">Moyenne de l'évaluation</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="text-align: center;"><span class="label label-info">{{ evaluations.evaluationsNotes.count }}</span></td>
+                                                        <td style="text-align: center;"><span class="label label-info">{{ noteMoyenne }}/{{ total }}</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <h3 style="text-align: center;">Actions :</h3>
+                                        <a href="{{ path('administration_evaluations_edit', {'id' : evaluations.id }) }}" class="btn btn-block btn-info"><i class="fas fa-edit"></i> Éditer l'évaluation</a>
+                                        <button class="btn btn-block btn-warning"><i class="fas fa-redo-alt"></i> Relancer le calcul des résultats</button>
+                                        <button class="btn btn-block btn-success" id="checkData"><i class="fas fa-check"></i> Vérifier la cohérence des données</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <div class="chart">
+                                <canvas id="histogrammeNotes" ></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Participants</h3>
+                </div>
+                <div class="box-body">
+                    <table id="participants" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom de l'utilisateur</th>
+                            <th>Note</th>
+                            <th>Équivalent sur 20</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for userNote in evaluations.evaluationsNotes %}
+                                <tr>
+                                    <td>{{ userNote.id }}</td>
+                                    <td>{{ userNote.user.name}}</td>
+                                    <td><span class="label label-info">{{ userNote.note }}/{{ total }}</span></td>
+                                    <td>
+                                        {% if (userNote.note*20)/total < 10 %}
+                                            <span class="label label-danger">{{ (userNote.note*20)/total }}/20</span>
+                                        {% elseif (userNote.note*20)/total > 10 and (userNote.note*20)/total < 13 %}
+                                            <span class="label label-warning">{{ (userNote.note*20)/total }}/20</span>
+                                        {% else %}
+                                            <span class="label label-success">{{ (userNote.note*20)/total }}/20</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+
+    <script>
+        $(function (){
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            $('#checkResult').hide();
+        });
+
+        $("#checkData").click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '{{ path('administration_evaluations_note_check_coherence') }}',
+                method: 'post',
+                data: {'evalId' : {{ evaluations.id}} }
+            }).done(function (msg) {
+                msg = JSON.parse(msg);
+                console.log(msg);
+                if(msg[0] == true) {
+                    if(msg[1].length !== 0) {
+                        $("#checkResultText").html("").append("Les données ne semblent pas correspondrent voici les détails :");
+                        for(let i=0;i<msg[1].length;i++) {
+                            $("#checkResultList").append("" +
+                                "<li>" +
+                                "Problème avec: " + msg[1][i][0] + " message suivant : " + msg[1][i][2] +
+                                "</li>")
+                        }
+
+                        $("#checkResult").show();
+                    } else {
+                        $("#checkResultText").html("").append("Les données de l'évaluation semblent cohérents !");
+                        $("#checkResult").show();
+                    }
+                }
+            });
+        })
+
+    </script>
+    <script>
+        let ctx = document.getElementById('histogrammeNotes').getContext('2d');
+        let myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'Notes',
+                    data: [
+                        {% for note in notes %}
+                            {x:{{note['note'] }}, y:'{{ note['occ'] }}' },
+                        {% endfor %}
+                    ]
+                }],
+                labels: [
+                    {% for note in notes %}
+                    '{{note['note'] }}',
+                    {% endfor %}
+                ],
+            }
+        });
+    </script>
+{% endblock %}

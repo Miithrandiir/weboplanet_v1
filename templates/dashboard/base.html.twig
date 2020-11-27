@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>WeboPlanet</title>
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/alerts.css') }}"/>
+
+    {% block stylesheets %}{% endblock %}
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+</head>
+<body>
+<div class="bar-resp">
+    <a href="#" id="barsResp" class="hamburger-resp"><i class="fas fa-bars"></i></a>
+</div>
+<div class="content">
+
+    <aside>
+        <div class="nav">
+            <div id="userArea">
+                <img src="{{ asset('img/profil-2.svg') }}" alt="Image de profil"/>
+
+                <p>Bienvenue <span>{{ app.user.name }}</span></p>
+
+            </div>
+            <ul>
+                <li>NAVIGATION</li>
+                <li><a href="{{ path('dashboard_account') }}">Accueil</a></li>
+                <li><a href="{{ path('course') }}">Les cours</a></li>
+                <li><a href={{ path('training') }}"">Entrainements</a></li>
+                <li><a href="{{ path('dashboard_evaluations') }}">Évaluations</a></li>
+                <li><a href="{{ path('dashboard_notes') }}">Mes notes</a></li>
+                {% if is_granted("ROLE_ENSG") %}
+                    <li><a href="{{ path('administration_index') }}">Administration</a></li>
+                {% endif %}
+                <li><a href="{{ path('logout') }}">Se déconnecter</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    {% block body %}{% endblock %}
+
+</div>
+
+<footer>
+    <div class="cat-footer">
+        <div class="col-3">
+            <h2>Qu'est ce que WeboPlanet</h2>
+            <p>Weboplanet est un site éducatif concue pour l'Université du Littoral Côte d'Opale (ULCO)</p>
+        </div>
+        <div class="col-3">
+            <h2>Les liens</h2>
+            <ul>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Mon Compte</a></li>
+                <li><a href="#">Mentions légales</a></li>
+            </ul>
+        </div>
+        <div class="col-3">
+            <h2>Légale & Contact</h2>
+            <p>Pour toutes demandes :</p>
+            <p>contact@weboplanet.com</p>
+            <br/>
+            <p>Les informations gérées sur ce site n'ont pas fait l'objet d'une déclaration à la CNIL. Cf DI-006</p>
+            <br/>
+        </div>
+    </div>
+    <div class="developedBy">
+        Développé par HEBAN Simon & TASSART Hugo
+    </div>
+</footer>
+
+<script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ asset('js/navigation.js') }}"></script>
+<script src="{{ asset('js/responsive.dashboard.js') }}"></script>
+{% block javascripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,193 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block body %}
+<main>
+    <section class="box">
+        <header>
+            <h2>Analyse</h2>
+        </header>
+        <div class="content">
+
+            <div class="note">
+
+                {% for evaluationQuestion in  evaluation.evaluationsQuestions %}
+                    <div class="block">
+                        <div class="question">
+                            {{ evaluationQuestion.question }}
+                        </div>
+                        <div class="reponse">
+                        {% for evalAnswer in evaluationQuestion.evaluationsAnswers %}
+                            {# CORRECTION CODE #}
+                            {% if evaluationQuestion.type != null %}
+                                <label>
+                                    <code class="language-cpp">
+                                    {{ evalAnswer.answer|nl2br  }}
+                                    </code>
+
+
+                                </label>
+
+                                <p style="text-align: center;">Votre réponse :
+                                    {% for answer in answers %}
+                                        {% if answer.evaluationsQ.id == evaluationQuestion.id and answer.isCorrect  %}
+                                            <span style="color: #2ecc71;">({{ evaluationQuestion.points }} pts)</span>
+                                        {% else %}
+                                            <span style="color: #e74c3c;">(0 pts)</span>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                 </p>
+                                <label>
+                                    <code class="language-cpp">
+                                        {% for answer in answers %}
+                                            {% if answer.evaluationsQ.id == evaluationQuestion.id %}
+                                                {{ evaluationQuestion.code|replace({'{ici}' : answer.codeResponse})|nl2br }}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                    </code>
+                                </label>
+                            {# CORRECTION QCM #}
+                            {% else %}
+                                {# On doit différencier plusieurs cas, le premier une seul bonne réponse, l'input en radio, si plusieurs bonne réponse, l'input en checkbox #}
+
+                                {% set counter = 0 %}
+
+                                {% for evalAnswer in evaluationQuestion.evaluationsAnswers %}
+                                    {% if evalAnswer.isTrue == true %}
+                                        {% set counter = counter +1 %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {%  if(counter <= 1) %}
+                                    {# radio type ! #}
+                                    {% if evalAnswer.evalQuestionId.id == evaluationQuestion.id %}
+                                    <label>
+                                        {{ evalAnswer.answer }}
+                                        <input type="radio" name="interro{{ evaluationQuestion.id }}" {% if evalAnswer.isTrue %}checked{% endif %} disabled/>
+                                        {% for answer in answers %}
+                                            {% for userAnswer in answer.evaluationsA %}
+                                            {% if userAnswer.id == evalAnswer.id %}
+                                                {% if answer.isCorrect == true %}
+                                                    <span class="right">Votre réponse ({{ evaluationQuestion.points }} pts) </span>
+                                                {% else %}
+                                                    <span class="wrong">Votre réponse (0 pts)</span>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </label>
+                                    {% endif %}
+                                {# checkbox type #}
+                                {% else %}
+                                    {% if evalAnswer.evalQuestionId.id == evaluationQuestion.id %}
+                                    <label>
+                                        {{ evalAnswer.answer }}
+                                        <input type="checkbox" name="interro{{ evaluationQuestion.id }}"
+                                               {% if evalAnswer.isTrue %}
+                                                   checked
+                                               {% endif %}
+
+                                               disabled/>
+                                        {% for answer in answers %}
+                                            {% for userAnswer in answer.evaluationsA %}
+                                                {% if userAnswer.id == evalAnswer.id %}
+                                                    {% if answer.isCorrect == true %}
+                                                        <span class="right">Votre réponse ({{ evaluationQuestion.points }} pts) </span>
+                                                    {% else %}
+                                                        <span class="wrong">Votre réponse (0 pts)</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        {% endfor %}
+                                    </label>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="box">
+        <header>
+            <h2>Statistiques</h2>
+        </header>
+        <div class="content">
+            <div class="alert success">
+                <h2><i class="fas fa-info"></i> Information :</h2>
+                <p>Les statistiques sont là pour vous donner une idée du niveau de difficulté de l'interrogation. Si vous n'êtes pas dans la moyenne, pas d'inquiétude, vous ferez mieux la fois prochaine ! Si vous avez le moindre problème n'hésitez pas à contacter votre professeur.</p>
+            </div>
+
+            {% for evaluationQuestion in  evaluation.evaluationsQuestions %}
+                <h3 style="text-align:center;">Question : {{ evaluationQuestion.question }}</h3>
+                <canvas id="question_{{ evaluationQuestion.id }}" width="400" height="100"></canvas>
+            {% endfor %}
+
+
+
+        </div>
+    </section>
+</main>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.eval.note.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/prism.js.css') }}"/>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script src="{{ asset('js/prism.min.js') }}"></script>
+    <script>
+        {% for evaluationQuestion in  evaluation.evaluationsQuestions %}
+        let ctx_{{ evaluationQuestion.id }} = document.getElementById('question_{{ evaluationQuestion.id }}').getContext('2d');
+        let myChart_{{ evaluationQuestion.id }} = new Chart(ctx_{{ evaluationQuestion.id }}, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for answer in evaluationQuestion.evaluationsAnswers %}
+                        '{{ answer.answer }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Nombre de personnes ayant sélectionné la réponse ',
+                    data: [
+                        {% for answer in evaluationQuestion.evaluationsAnswers %}
+                        {% set nbResponse = 0%}
+                            {% for evaluationData in evaluationQuestion.evaluationsDatas %}
+                                {% for userAnswer in evaluationData.evaluationsa %}
+                                    {% if userAnswer.id == answer.id %}
+                                        {% set nbResponse = nbResponse + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {{ nbResponse }},
+                        {% endfor %}
+
+                    ],
+                    borderWidth: 1
+                },
+                ]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+        {% endfor %}
+    </script>
+{% endblock %}

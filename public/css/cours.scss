@@ -1,0 +1,139 @@
+@import 'vars';
+
+#coursPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url("../img/home-office-1867761_1920.jpg");
+  -webkit-background-size: cover;
+  background-size: cover;
+
+  &>.container {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+
+    @media screen and (max-width: 1260px) {
+      flex-direction: column;
+      &>aside {
+        margin: 20px auto;
+        width: 100% !important;
+        padding: 10px;
+      }
+
+      &>.content {
+        width: 100% !important;
+      }
+    }
+    &>aside {
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      margin-right: 5%;
+      width: 20%;
+      border-right: 1px solid darken($second-color, 10%);
+      background: $second-color;
+      &>p {
+        padding: 10px;
+        text-align: center;
+        background: darken($second-color, 10%);
+        text-transform: uppercase;
+        font-weight: bold;
+        color: $main-color;
+      }
+      &>ul {
+        list-style: none;
+        width: 100%;
+        &>li {
+          text-align: center;
+          width: inherit;
+          &>a {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 10px;
+            box-sizing:  border-box;
+            width: inherit;
+            text-decoration: none;
+            color: darken($main-color, 10%);
+            &:hover {
+              background: lighten($second-color,10%);
+              cursor:pointer;
+            }
+          }
+        }
+      }
+    }
+
+    &>.content {
+      -webkit-border-radius: 3px;
+      -moz-border-radius: 3px;
+      border-radius: 3px;
+      background: $second-color;
+      width: 75%;
+      padding: 10px;
+      overflow: hidden;
+      &>article {
+        &>img {
+          width: 100%;
+          margin: 10px auto;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+        }
+        &>h1 {
+          text-align: center;
+          color: $main-color;
+          background: darken($second-color,10%);
+        }
+        &>h2 {
+          text-align: center;
+          color: $main-color;
+        }
+      }
+
+      &>hr {
+        width: 50%;
+        margin: 20px auto;
+      }
+
+      &>.entrainement {
+        &>h3 {
+          text-align: center;
+          font-weight: 500;
+        }
+        &>table {
+          margin: 10px auto;
+          &>tbody {
+            & > tr {
+              & > td {
+                margin: 20px 0;
+                a {
+                  display: flex;
+                  padding: 5px;
+                  text-decoration: none;
+                  background-color: #FFE53B;
+                  background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+                  -webkit-border-radius: 5px;
+                  -moz-border-radius: 5px;
+                  border-radius: 5px;
+                  justify-content: center;
+                  color: white;
+                  transition: background 500ms;
+
+                  &:hover{
+                    background-color: #FFE53B;
+                    background-image: linear-gradient(213deg, #FF2525 0%, #FFE53B 74%);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

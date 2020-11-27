@@ -1,0 +1,151 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Diplômes
+                <small>Affichage</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Diplômes</a></li>
+                <li class="active">Affichage</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vue sur les diplômes disponibles sur le site</h3>
+                </div>
+                <div class="box-body">
+                    <table id="diploma" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom du diplôme</th>
+                            <th>Nom de la classe</th>
+                            <th>Professeurs référents</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for section in sections %}
+                            <tr>
+                                <td>{{ section.id }}</td>
+                                <td>{{ section.diploma.name}}</td>
+                                <td>{{ section.name}}</td>
+                                <td>
+                                    <ul>
+                                    {% for user in section.sectionRef.userID %}
+                                        <li>{{ user.name }}</li>
+                                        {% else %}
+                                        <li>Aucun professeur</li>
+                                    {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <a href="{{ path('administration_section_edit', {'id':section.id}) }}" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <button href="" class="btn btn-danger deleteSection" data-section="{{ section.id }}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+    <div class="modal modal-default fade" id="modalInfo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Informations :</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="msgModal">
+                        </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block title %}
+    Affichage des diplômes
+{% endblock %}
+
+{% block javascripts %}
+    <!-- DataTables -->
+    <script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#diploma').DataTable();
+        });
+
+        $('.btnDanger').click(function () {
+            $('#modal-danger').modal();
+        });
+
+        let object = null;
+
+        $(".deleteSection").click(function (e) {
+            console.log($(this).data('section'));
+            object = $(this);
+            e.preventDefault();
+            $.ajax({
+                url: "{{ path('administration_section_delete') }}",
+                method: "post",
+                data: {sectionID:  $(this).data('section')}
+            }).done(function (msg) {
+                if(msg == "true") {
+                    $("#msgModal").append("<i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
+                        "La suppression de la classe a bien été prise en compte !");
+                    object.parent().parent().remove();
+                    $("#modalInfo").modal();
+                } else {
+                    $("#msgModal").append("<i class=\"fa fa-exclamation\" aria-hidden=\"true\"></i>\n" +
+                        "Il est impossible de supprimer la classe, veuillez reporter l'incident aux développeurs avec comme données (PROB: ADM_SECTION_DELETE, SECTIONID: "+object.data('section')+")");
+                    $("#modalInfo").modal();
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .example-modal .modal {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            right: auto;
+            left: auto;
+            display: block;
+            z-index: 1;
+        }
+
+        .example-modal .modal {
+            background: transparent !important;
+        }
+    </style>
+{% endblock %}

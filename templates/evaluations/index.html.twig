@@ -1,0 +1,80 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.eval.css') }}" />
+{% endblock %}
+
+
+{% block body %}
+<main>
+    <section class="box">
+        <header>
+            <h2>EVALUATIONS</h2>
+        </header>
+        <div class="content">
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Date de début</th>
+                    <th>Date de fin</th>
+                    <th>Note</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for evaluation in evaluations %}
+
+
+                    {%  set difference = evaluation[1]|diff_date %}
+
+                <tr class="
+                    {% if evaluation[4] %}
+                        success
+                    {% else %}
+                        {% if (difference|date('d')|number_format <= 3) %}
+                            warning
+                        {% elseif(difference <= 0) %}
+                            danger
+                        {% elseif evaluation[4] == true %}
+                            success
+                        {% endif %}
+                    {% endif %}">
+                    <td>{{ evaluation[2].id }}</td>
+                    <td>{{ evaluation[2].name }}</td>
+                    <td>{{ evaluation[0]|date('d-m-Y H:i:s') }}</td>
+                    <td>{{ evaluation[1]|date('d-m-Y H:i:s') }}</td>
+
+                    {% if(evaluation[4] and evaluation[5] == null) %}
+                        <td>En attente de correction</td>
+                        <td>
+                            Aucune action
+                        </td>
+                    {% elseif(evaluation[5] != null) %}
+                        <td>{{ evaluation[5].note }}/{{ evaluation[6] }}</td>
+                        <td>
+                            <a href="{{ path('dashboard_evaluations_note', {'id' : evaluation[2].id}) }}">Voir les résultats</a>
+                        </td>
+                    {% elseif difference <= 0 %}
+                        <td>Manqué</td>
+                        <td>
+                            <a href="#">Voir les résultats</a>
+                        </td>
+                    {% else %}
+                        <td>En attente</td>
+                        <td>
+                            <a href="{{ path('dashboard_evaluations_do', {'id' : evaluation[2].id}) }}">Réaliser le test</a>
+                        </td>
+                    {% endif %}
+
+
+                </tr>
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+{% endblock %}

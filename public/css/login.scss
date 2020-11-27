@@ -1,0 +1,105 @@
+@import 'vars';
+
+#loginPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url("../img/home-office-1867761_1920.jpg");
+  -webkit-background-size: cover;
+  background-size: cover;
+  &>.container {
+    width: 30%;
+    margin: 20px auto;
+    padding:  20px auto;
+    background: $second-color;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 3px -3px 5px -2px #bdc3c7;
+    -moz-box-shadow: 3px -3px 5px -2px #bdc3c7;
+    box-shadow: 3px -3px 5px -2px #bdc3c7;
+    &>h2{
+      text-align: center;
+      color: $main-color;
+      margin: 10px auto;
+    }
+
+    &>form {
+      display: flex;
+      flex-direction: column;
+      &>label {
+        margin: 10px 10px;
+        display: flex;
+        flex-direction: column;
+        color: $main-color;
+        &>input {
+          border: 1px solid #bdc3c7;
+          background: #ecf0f1;
+          padding: 10px;
+          color: $main-color;
+          font-weight: bold;
+        }
+      }
+      &>input {
+        border: 1px solid #bdc3c7;
+        background: #ecf0f1;
+        padding: 10px;
+        color: $main-color;
+        font-weight: bold;
+        margin: 0 10px;
+      }
+
+      &>button, &>a {
+        margin: 10px auto;
+        padding: 10px;
+        cursor: pointer;
+        background: #9b59b6;
+        border: none;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        color: white;
+        font-size: 16px;
+        -webkit-transition: background 500ms ease-in-out;
+        -moz-transition: background 500ms ease-in-out;
+        -ms-transition: background 500ms ease-in-out;
+        -o-transition: background 500ms ease-in-out;
+        transition: background 500ms ease-in-out;
+      }
+      &>a {
+        text-decoration: none;
+        background: #e67e22;
+        &:hover {
+          background: lighten(#e67e22, 5%);
+        }
+      }
+      &>button {
+        &:hover {
+          background: lighten(#9b59b6, 5%);
+        }
+      }
+    }
+    
+    @media screen and (max-width: 1000px) {
+      width: 50%;
+    }
+
+    @media screen and (max-width: 700px) {
+      width: 75%;
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 97%;
+      .alert{
+        width: 100%;
+        text-align: center;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+      }
+    }
+
+  }
+}

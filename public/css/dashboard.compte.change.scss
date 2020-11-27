@@ -1,0 +1,10 @@
+main>.box>.content {
+  padding: 10px;
+  min-height: 90%;
+  &>form {
+    &>button {
+      display: block;
+      margin: 10px auto;
+    }
+  }
+}

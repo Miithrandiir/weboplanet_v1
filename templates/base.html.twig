@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>WeboPlanet</title>
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/alerts.css') }}"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <meta content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <title>Weboplanet - {% block title %}Accueil{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    <div id="siteTitle">
+        <h1>Weboplanet</h1>
+    </div>
+
+    <a href="#" class="menu-resp"><i class="fas fa-bars"></i></a>
+
+    <nav>
+        <ul>
+            <li class="active"><a href="index.html">Accueil</a></li>
+            <li>
+                <a href="#" class="subNav">Cours&nbsp;<i class="fas fa-chevron-down"></i></a>
+
+                <ul>
+                        {# TODO menu pour tout
+                        {% for course in courses %}
+                            {% if course.chapters != [] %}
+                                {% if course.isVisible == true %}
+                                <li>
+
+                                    <a href="#" class="subNav">{{ course.name }}&nbsp;<i class="fas fa-chevron-down"></i></a>
+                                <ul>
+                            {% for chapter in chapters %}
+                                // Vérifie si chapter.courseID.id == course.id
+                                {% if chapter.courseID == null %}
+                                {% elseif chapter.courseID.id == course.id %}
+                                <li>
+                                    <a href="{{ path('chapter_viewPDF', {'chapter': chap.id}) }}> {{ chapter.name }}</a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                                </ul>
+                            </li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+
+                        #}
+
+                </ul>
+            </li>
+            {% if app.user != null %}
+                <li class="resp">
+                    <a href="{{ path('dashboard_account') }}">Compte</a>
+                </li>
+                <li>
+                    <a href="{{ path('logout') }}">Déconnexion</a>
+                </li>
+            {% else %}
+                <li class="resp">
+                    <a href="{{ path('login') }}">Connexion</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <ul>
+        <li>
+            {% if app.user != null %}
+                <a href="{{ path('dashboard_account') }}"><i class="fas fa-sign-in-alt"></i>&nbsp;COMPTE</a>
+            {% else %}
+                <a href="{{ path('login') }}"><i class="fas fa-sign-in-alt"></i>&nbsp;CONNEXION</a>
+            {% endif %}
+        </li>
+    </ul>
+    </header>
+
+        {% block body %}{% endblock %}
+
+
+    <footer>
+        <div class="cat-footer">
+            <div class="col-3">
+                <h2>Qu'est ce que WeboPlanet</h2>
+                <p>Weboplanet est un site éducatif concue pour l'Université du Littoral Côte d'Opale (ULCO)</p>
+            </div>
+            <div class="col-3">
+                <h2>Les liens</h2>
+                <ul>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">Mon Compte</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                </ul>
+            </div>
+            <div class="col-3">
+                <h2>Légale & Contact</h2>
+                <p>Pour toutes demandes :</p>
+                <p>contact@weboplanet.com</p>
+                <br/>
+                <p>Les informations gérées sur ce site n'ont pas fait l'objet d'une déclaration à la CNIL. Cf DI-006</p>
+                <br/>
+            </div>
+        </div>
+        <div class="developedBy">
+            Développé par HEBAN Simon & TASSART Hugo
+        </div>
+    </footer>
+
+    {% block javascripts %}{% endblock %}
+
+    </body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}
+    Cours
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.course.css') }}" />
+{% endblock %}
+
+{% block body %}
+    <main>
+
+        {% for course in courses %}
+            <section class="box">
+                <header>
+                    <h2>{{ course.name }}</h2>
+                </header>
+                <div class="content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <td>NOM</td>
+                                <td>LIEN</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for chapter in course.chapters %}
+                                <tr>
+                                    <td>{{ chapter.name }}</td>
+                                    <td><a target="_blank" href="{{ path('chapter_viewPDF', {chapter: chapter.id})
+                                        }}"><i class="fas fa-download"></i> Télécharger</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        {% endfor %}
+
+
+    </main>
+{% endblock %}

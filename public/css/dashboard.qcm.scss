@@ -1,0 +1,46 @@
+@import '_vars.scss';
+
+
+main>.box {
+  padding: 5px;
+  &>.content {
+    min-height: 90%;
+    margin: 10px auto;
+
+    &>.qcms {
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      &>.qcm {
+        display: flex;
+        flex-direction: row;
+        margin: 7px 0;
+        &>h4 {
+          width: 50%;
+        }
+
+        &>.go {
+          &>a {
+            background: #8e44ad;
+            padding: 5px;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            border-radius: 3px;
+            color: white;
+            text-decoration: none;
+          }
+        }
+
+        &>p {
+          width: 30%;
+        }
+      }
+    }
+  }
+}
+
+
+.qcmSearch {
+  background: #f39c12 !important;
+  border: 1px solid #f39c12 !important;
+}

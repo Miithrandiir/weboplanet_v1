@@ -1,0 +1,231 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Édition d'un diplôme{% endblock %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Groupe
+                <small>édition</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Groupe</a></li>
+                <li class="active">édition</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Édition d'un groupe</h3>
+                </div>
+                <div class="box-body">
+                    {{ form_start(form) }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary sendEdition">Envoyer</button>
+                    </div>
+
+                    <!-- /.box-body -->
+                    {{ form_end(form) }}
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Ajouts & suppression de classes</h3>
+                    <button href="" class="pull-right btn btn-success addClasses"  data-toggle="addClasses" data-target="#addClasses" >Ajouter une classe</button>
+                </div>
+                <div class="box-body">
+                    <div class="alert alert-info alert-dismissible">
+                        <h4><i class="icon fa fa-info"></i> Information !</h4>
+                        Un groupe peut référer à plusieurs classe, on peut donc avoir facilement la configuration suivante:<br/>
+                        Un groupe d'anglais peut être relié à plusieurs classe !
+                    </div>
+                    <table id="classes" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom de la classe</th>
+                            <th>Nom du diplôme préparé</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for groupSection in group.groupSections %}
+                                {% for section in groupSection.sectionID  %}
+                                    <tr>
+                                        <td>{{ section.id }}</td>
+                                        <td>{{ section.name }}</td>
+                                        <td>{{ section.diploma.name }}</td>
+                                        <td>
+                                            <button href="" class="btn btn-danger deleteSection" data-section="{{ section.id }}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div class="modal modal-default fade" id="addClasses">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{ form_start(addClasses) }}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Lié le groupe <b>{{ group.name }}</b> à des classes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{ form_label(addClasses.classes) }}
+                        {{ form_widget(addClasses.classes, {'attr':{'class':'form-control select2', 'style':'width:100%', 'id':'formInputClassAdd'}}) }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                    <button class="btn btn-primary formAddClasses" data-dismiss="modal">Continuer</button>
+                </div>
+                {{ form_end(addClasses) }}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal modal-default fade" id="informations">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="fa fa-check" aria-hidden="true"></i>
+                         Tâche effectuée avec succès !</h4>
+                </div>
+                <div class="modal-body">
+                    <p>L'ajout de classes à été effectuée avec succès !</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal modal-default fade" id="error">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="fa fa-times" aria-hidden="true"></i>
+                        Une erreur est survenue !</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Il est impossible de supprimer la classe, veuillez reporter l'incident aux développeurs avec comme données (PROB: ADM_GROUP_EDIT_DELETE_CLASSES, CLASSID: <span id="classID"></span>)</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+    <script>
+        $(function (){
+            //Initialize Select2 Elements
+            $('.select2').select2();
+        });
+
+        //Suppression d'une classe d'un groupe
+        $('body').on('click','.deleteSection',function (e) {
+            e.preventDefault();
+            let object = $(this);
+
+            $.ajax({
+                url : "{{ path('administration_group_delete_class') }}",
+                method: 'post',
+                data : {sectionId : $(this).data('section'), groupId : {{ group.id }} }
+            }).done(function (msg) {
+                if(msg == true) {
+                    object.parent().parent().remove();
+                } else {
+                    $("#classID").html(object.data('section'));
+                    $("#error").modal();
+                }
+            })
+        });
+
+        //Modal
+        $(".addClasses").click(function (e) {
+            e.preventDefault();
+            $("#addClasses").modal();
+        });
+        //Ajout d'une classe
+        $(".formAddClasses").click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url : "{{ path('administration_group_add_class') }}",
+                method : 'post',
+                data : {groupId : {{ group.id }}, sectionsId : $('#form_classes').val() }
+            }).done(function (msg) {
+                console.log(msg);
+                let data = JSON.parse(msg);
+                for(let i=0;i<data.length;i++) {
+                    $("#classes").append(
+                        "<tr>" +
+                        "<td>"+data[i][0]+"</td>" +
+                        "<td>"+data[i][1]+"</td>" +
+                        "<td>"+data[i][2]+"</td>" +
+                        "<td><button class=\"btn btn-danger deleteSection\" data-section=\""+data[i][0]+"\"><i class=\"fa fa-trash\" aria-hidden=\"true\"></i></button></td>" +
+                        "</tr>"
+                    )
+                }
+
+                $("#informations").modal();
+            })
+        });
+
+    </script>
+{% endblock %}

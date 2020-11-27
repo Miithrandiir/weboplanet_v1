@@ -1,0 +1,10 @@
+main > .box > .content {
+  padding: 10px;
+  min-height: 90%;
+}
+main > .box > .content > form > button {
+  display: block;
+  margin: 10px auto;
+}
+
+/*# sourceMappingURL=dashboard.compte.change.css.map */

@@ -1,0 +1,73 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block body %}
+    <main>
+        <section class="box">
+            <header>
+                <h2>Évaluation</h2>
+            </header>
+            <div class="content">
+                <div class="question">
+                    <h3>Question :</h3>
+                    <p>{{ question.question }}</p>
+                </div>
+
+                <div class="reponse">
+                    <h3>Réponse : </h3>
+                {{ form_start(form) }}
+
+                    {% for answer in form.answer %}
+                        <div class="form-group">
+                         {{ form_label(answer) }}
+                         {{ form_widget(answer) }}
+                        </div>
+                    {% endfor %}
+
+                    <button id="sendEval">Je valide !</button>
+
+                {{ form_end(form) }}
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.qcm.qcm.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $("#sendEval").click(function (e) {
+            e.preventDefault();
+
+            let checked = [];
+
+            $("input[name*='form[answer][]']").each(function (e) {
+                if($(this).is(':checked')) {
+                    checked.push($(this).val());
+                }
+            });
+
+            if(!$("input[name*='form[answer][]']").length) {
+                $("input[name*='form[answer]']").each(function (e) {
+                    if($(this).is(':checked')) {
+                        checked.push($(this).val());
+                    }
+                });
+            }
+
+            $.ajax({
+                url: '{{ path('dashboard_evaluations_save_data') }}',
+                method: 'post',
+                data : {'evalQId':{{ question.id }},'responses':checked}
+            }).done(function (msg) {
+                if(msg === true) {
+                    location.reload();
+                }
+            })
+        });
+    </script>
+{% endblock %}

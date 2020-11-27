@@ -1,0 +1,54 @@
+main > .box > .content {
+  min-height: 90%;
+  margin: 10px auto;
+}
+main > .box > .content > .notes {
+  display: flex;
+  flex-direction: column;
+}
+main > .box > .content > .notes > .note {
+  display: flex;
+  flex-direction: row;
+  margin: 5px 0;
+}
+main > .box > .content > .notes > .note > h4 {
+  width: 50%;
+  padding-left: 10px;
+}
+main > .box > .content > .notes > .note > .remarque {
+  width: 30%;
+  text-align: center;
+}
+main > .box > .content > .notes > .note > p {
+  width: 20%;
+  text-align: center;
+}
+main > .box > footer {
+  background: #8e44ad;
+  padding: 5px;
+  width: auto !important;
+}
+main > .box > footer > p {
+  color: white;
+}
+main > .box > footer > .note {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.bien {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.medium {
+  color: #d35400;
+  font-weight: bold;
+}
+
+.critical {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=dashboard.notes.css.map */

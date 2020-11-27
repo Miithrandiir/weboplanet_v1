@@ -1,0 +1,63 @@
+@import '_vars.scss';
+
+
+main>.box {
+  &>.content {
+    min-height: 90%;
+    margin: 10px auto;
+
+    & > .notes {
+      display: flex;
+      flex-direction: column;
+
+      & > .note {
+        display: flex;
+        flex-direction: row;
+        margin: 5px 0;
+
+        & > h4 {
+          width: 50%;
+          padding-left: 10px;
+        }
+
+        & > .remarque {
+          width: 30%;
+          text-align: center;
+        }
+
+        & > p {
+          width: 20%;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  &>footer {
+    background: #8e44ad;
+    padding: 5px;
+    width: auto !important;
+    &>p {
+      color: white;
+    }
+    &>.note {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+  }
+}
+
+.bien {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.medium {
+  color: #d35400;
+  font-weight: bold;
+}
+
+.critical {
+  color: #c0392b;
+  font-weight: bold;
+}

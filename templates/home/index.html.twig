@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<div id="slider">
+    <div class="slide" style="background: url({{ asset('img/code-1839406_1920.jpg') }}); -webkit-background-size: cover;background-size: cover;">
+        <div class="desc">
+            <h2>Bienvenue sur WeboPlanet</h2>
+            <p></p>
+        </div>
+    </div>
+    <div class="slide" style="background: url({{ asset('img/technology-785742_1920.jpg') }}); -webkit-background-size: cover;background-size: cover;">
+        <div class="desc">
+            <h2>WeboPlanet fait peau neuve</h2>
+            <p></p>
+        </div>
+    </div>
+    <div class="slide" style="background: url({{ asset('img/code-1839406_1920.jpg') }}); -webkit-background-size: cover;background-size: cover;">
+        <div class="desc">
+            <h2>Bienvenue sur WeboPlanet</h2>
+            <p></p>
+        </div>
+    </div>
+</div>
+
+<!--<div class="alert warning">
+    <h2><i class="fas fa-bullhorn"></i> ALERTE:</h2>
+    <p>Maintenance de Weboplanet à partir du Lundi xx juin 2019 jusqu'au Lundi xx juin 2019</p>
+</div>
+
+<div class="alert success">
+    <h2><i class="fas fa-bullhorn"></i> ALERTE:</h2>
+    <p>Maintenance de Weboplanet à partir du Lundi xx juin 2019 jusqu'au Lundi xx juin 2019</p>
+</div>
+
+<div class="alert danger">
+    <h2><i class="fas fa-bullhorn"></i> ALERTE:</h2>
+    <p>Maintenance de Weboplanet à partir du Lundi xx juin 2019 jusqu'au Lundi xx juin 2019</p>
+</div>-->
+
+<div id="news">
+
+    {% for article in articles %}
+        <div class="new">
+            <div class="left" style="background: url({{ asset('img/home-office-1867761_1920.jpg') }}); -webkit-background-size: cover;background-size: cover;">
+                <div class="title">
+                    <h2>{{ article.title }}</h2>
+                </div>
+                <p class="staff"><i class="fas fa-user-shield"></i> {{ article.creator.username }}</p>
+            </div>
+            <div class="right">
+                <h2>{{ article.title }}</h2>
+
+               {{ article.content|raw }}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert warning">
+            <h2><i class="fas fa-bullhorn"></i> ALERTE:</h2>
+            <p>Aucun article n'a été publié</p>
+        </div>
+    {% endfor %}
+
+    {% if articles != null %}
+    <div class="knowMore">
+        <a href="#">Voir tous les autres articles</a>
+    </div>
+    {% endif %}
+
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/slider.js') }}"></script>
+    <script src="{{ asset('js/navigation.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,304 @@
+index:
+    path: /
+    controller: App\Controller\HomeController::index
+login:
+    path: /login
+    controller: App\Controller\SecurityController::login
+firstConnection:
+    path: /login/first
+    controller: App\Controller\SecurityController::first
+logout:
+    path: /logout
+    controller: App\Controller\SecurityController::logout
+#
+# PANEL UTILISATEURS
+#
+    #
+    # COMPTES
+    #
+dashboard_account:
+    path: /account
+    controller: App\Controller\AccountController::index
+dashboard_account_change_email:
+    path: /account/change/email
+    controller: App\Controller\AccountController::changeEmail
+dashboard_account_change_password:
+    path: /account/change/password
+    controller: App\Controller\AccountController::changePassword
+dashboard_anonyme_change_password:
+    path: /account/change/{token}
+    controller: App\Controller\AccountController::anonChangeEmail
+    #
+    # EVALUATIONS
+    #
+dashboard_evaluations:
+    path: /evaluations
+    controller: App\Controller\EvaluationsController::index
+dashboard_evaluations_do:
+    path: /evaluations/do/{id}
+    controller: App\Controller\EvaluationsController::do
+    requirements:
+        id: '\d+'
+dashboard_evaluations_save_data:
+    path: /evaluations/save/data
+    controller: App\Controller\EvaluationsController::saveData
+    methods: [post]
+dashboard_evaluations_note:
+    path: /evaluations/note/{id}
+    controller: App\Controller\EvaluationsController::viewResult
+    requirements:
+        id: '\d+'
+    #
+    #   NOTES
+    #
+dashboard_notes:
+    path: /notes
+    controller: App\Controller\AccountController::viewNotes
+    #
+    #   ENTRAINEMENT
+    #
+training:
+    path: /training
+    controller: App\Controller\TrainingController::index
+training_do:
+    path: /training/do/{id}
+    controller: App\Controller\TrainingController::do
+    requirements:
+        id: '\d+'
+training_compile:
+    path: /training/compiler
+    controller: App\Controller\TrainingController::compile
+    methods: [post]
+    #
+    #   COURS
+    #
+course:
+    path: /course
+    controller: App\Controller\CourseController::index
+#
+#   ADMINISTRATION
+#
+
+    #
+    #   INDEX
+    #
+administration_index:
+    path: /administration
+    controller: App\Controller\AdministrationController::index
+    #
+    #   DIPLÔMES
+    #
+administration_diploma_create:
+    path: /administration/diploma/create
+    controller: App\Controller\AdministrationDiplomaController::create
+administration_diploma_view:
+    path: /administration/diploma
+    controller: App\Controller\AdministrationDiplomaController::view
+administration_diploma_edit:
+    path: /administration/diploma/{id}
+    controller: App\Controller\AdministrationDiplomaController::edit
+    requirements:
+        id: '\d+'
+administration_diploma_delete:
+    path: /administration/diploma/{id}/delete
+    controller: App\Controller\AdministrationDiplomaController::delete
+    requirements:
+        id: '\d+'
+    #
+    #   SECTIONS
+    #
+administration_section_create:
+    path: /administration/section/create
+    controller: App\Controller\AdministrationSectionsController::create
+administration_section_view:
+    path: /administration/section
+    controller: App\Controller\AdministrationSectionsController::view
+administration_section_edit:
+    path: /administration/section/edit/{id}
+    controller: App\Controller\AdministrationSectionsController::edit
+    requirements:
+        id: '\d+'
+administration_section_delete_user:
+    path: /administration/section/deleteUser
+    controller: App\Controller\AdministrationSectionsController::deleteUser
+    methods: [post]
+administration_section_addProf:
+    path: /administration/section/addProf
+    controller: App\Controller\AdministrationSectionsController::addProf
+    methods: [post]
+administration_section_delete:
+    path: /administration/section/delete
+    controller: App\Controller\AdministrationSectionsController::delete
+    methods: [post]
+    #
+    #   GROUPES
+    #
+administration_group_create:
+    path: /administration/group/create
+    controller: App\Controller\AdministrationGroupController::create
+administration_group_view:
+    path: /administration/group
+    controller: App\Controller\AdministrationGroupController::view
+administration_group_edit:
+    path: /administration/group/edit/{id}
+    controller: App\Controller\AdministrationGroupController::edit
+    requirements:
+        id: '\d+'
+administration_group_delete:
+    path: /administration/group/delete
+    controller: App\Controller\AdministrationGroupController::delete
+    methods: [post]
+administration_group_delete_class:
+    path: /administration/group/deleteClass
+    controller: App\Controller\AdministrationGroupController::deleteClass
+    methods: [post]
+administration_group_add_class:
+    path: /administration/group/addClass
+    methods: [post]
+    controller: App\Controller\AdministrationGroupController::addClass
+    #
+    #   UTILISATEURS
+    #
+administration_users_view:
+    path: /administration/users
+    controller: App\Controller\AdministrationUsersController::view
+administration_user_edit:
+    path: /administration/users/{id}
+    controller: App\Controller\AdministrationUsersController::edit
+    requirements:
+        id: '\d+'
+administration_user_new_password:
+    path: /administration/users/newPassword
+    controller: App\Controller\AdministrationUsersController::sendNewPassword
+    methods: [post]
+administration_user_add_to_group:
+    path: /administration/users/addToGroup
+    controller: App\Controller\AdministrationUsersController::addToGroup
+    methods: [post]
+administration_user_remove_from_group:
+    path: /administration/users/removeFromGroup
+    controller: App\Controller\AdministrationUsersController::removeFromGroup
+    methods: [post]
+administration_user_add:
+    path: /administration/users/add
+    controller: App\Controller\AdministrationUsersController::create
+administration_user_import:
+    path: /administration/users/import
+    controller: App\Controller\AdministrationUsersController::import
+    #
+    #   COURS
+    #
+administration_course_view:
+    path: /administration/courses
+    controller: App\Controller\AdministrationCourseController::view
+administration_course_create:
+    path: /administration/courses/add
+    controller: App\Controller\AdministrationCourseController::create
+administration_course_edit:
+    path: /administration/courses/edit/{course}
+    controller: App\Controller\AdministrationCourseController::edit
+    requirements:
+        course: '\d+'
+
+
+    #
+    #   CHAPITRE
+    #
+administration_chapter_create:
+    path: /administration/chapter/create
+    controller : App\Controller\AdministrationChapterController::create
+administration_chapter_edit:
+    path: /administration/chapter/edit/{chapter}
+    controller: App\Controller\AdministrationChapterController::edit
+
+administration_chapter_view:
+    path: /administration/chapter/view
+    controller : App\Controller\AdministrationChapterController::view
+
+
+administration_chapter_viewPDF:
+    path: /administration/chapter/view/pdf/{chapter}
+    controller : App\Controller\AdministrationChapterController::viewPDF
+
+chapter_viewPDF:
+    path: chapter/view/pdf/{chapter}
+    controller : App\Controller\HomeController::viewPDF
+
+   #
+    #   EVALUATIONS
+    #
+administration_evaluations_create:
+    path: /administration/evaluations/create
+    controller: App\Controller\AdministrationEvaluationsController::create
+administration_evaluations_edit:
+    path: /administration/evaluations/edit/{id}
+    controller: App\Controller\AdministrationEvaluationsController::edit
+    requirements:
+        id: '\d+'
+administration_evaluations_view:
+    path: /administration/evaluations
+    controller: App\Controller\AdministrationEvaluationsController::view
+administration_evaluations_delete:
+    path: /administration/evaluations/delete
+    controller: App\Controller\AdministrationEvaluationsController::delete
+    methods: [post]
+administration_evaluations_get_question:
+    path: /administration/evaluations/getQuestion
+    controller: App\Controller\AdministrationEvaluationsController::getAnswersOfAQuestion
+    methods: [post]
+    #
+    #   QUESTION DES EVALUATIONS
+    #
+administration_evaluation_add_question:
+    path: /administration/evaluations/add/questions
+    controller: App\Controller\AdministrationEvaluationsController::addQuestion
+    methods: [post]
+administration_evaluation_delete_question:
+    path: /administration/evaluations/delete/questions
+    controller: App\Controller\AdministrationEvaluationsController::deleteQuestion
+    methods: [post]
+administration_evaluation_edit_question:
+    path: /administration/evaluations/edit/questions
+    controller: App\Controller\AdministrationEvaluationsController::editQuestion
+    methods: [post]
+    #
+    # GROUPES DES EVALUATIONS
+    #
+administration_evaluation_add_group:
+    path: /administration/evaluations/add/group
+    controller: App\Controller\AdministrationEvaluationsController::addGroup
+    methods: [post]
+administration_evaluation_delete_group:
+    path: /administration/evaluations/delete/group
+    controller: App\Controller\AdministrationEvaluationsController::deleteGroup
+    methods: [post]
+    #
+    # TYPE D'EVALUATION
+    #
+administration_evaluations_type_create:
+    path: /administration/evaluations/type/create
+    controller: App\Controller\AdministrationEvaluationsController::typeCreate
+administration_evaluations_type_edit:
+    path: /administration/evaluations/type/edit/{id}
+    controller: App\Controller\AdministrationEvaluationsController::typeEdit
+    requirements:
+        id: '\d+'
+administration_evaluations_type_view:
+    path: /administration/evaluations/type
+    controller: App\Controller\AdministrationEvaluationsController::typeView
+administration_evaluations_type_delete:
+    path: /administration/evaluations/type/delete
+    controller: App\Controller\AdministrationEvaluationsController::deleteEvalType
+    methods: [post]
+    #
+    # EVALUATIONS RESULTAT
+    #
+administration_evaluations_note_view:
+    path: /administration/evaluations/notes/{id}
+    controller: App\Controller\AdministrationsResultatController::view
+    requirements:
+        id: '\d+'
+administration_evaluations_note_check_coherence:
+    path: /administration/evaluations/notes/coherence
+    controller: App\Controller\AdministrationsResultatController::checkCoherence
+    methods: [post]

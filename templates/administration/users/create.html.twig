@@ -1,0 +1,85 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Création d'un utilisateurs{% endblock %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Utilisateurs
+                <small>création</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Utilisateurs</a></li>
+                <li class="active">création</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Création d'un utilisateur</h3>
+                </div>
+                <div class="box-body">
+                    {{ form_start(form) }}
+
+                    {% if form_errors(form) %}
+                        <div class="info-box danger">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="desc">
+                                <p>{{ form_errors(form) }}</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form_label(form.firstname) }}
+                            {{ form_widget(form.firstname, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.lastname) }}
+                            {{ form_widget(form.lastname, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.roles) }}
+                            {{ form_widget(form.roles, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.diploma) }}
+                            {{ form_widget(form.diploma, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Créer</button>
+                    </div>
+
+                    <!-- /.box-body -->
+                    {{ form_end(form) }}
+                </div>
+                <div class="box-footer">
+
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block body %}
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    Diplômes
+                    <small>Affichage</small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                    <li><a href="#">Diplômes</a></li>
+                    <li class="active">Affichage</li>
+                </ol>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+
+                <!-- Default box -->
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Vue sur les diplômes disponibles sur le site</h3>
+                    </div>
+                    <div class="box-body">
+                        <table id="diploma" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom du diplôme</th>
+                                <th>Professeur référent</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for degree in diploma %}
+                                    <tr>
+                                        <td>{{ degree.id }}</td>
+                                        <td>{{ degree.name }}</td>
+                                        <td>{{ degree.user.name }}</td>
+                                        <td>
+                                            <a href="{{ path('administration_diploma_edit',{ 'id' : degree.id }) }}" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                            <button href="" class="btn btn-danger btnDanger" data-toggle="modalDanger" data-target="#modal-danger" data-value="{{ degree.id }}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <!-- /.box -->
+
+            </section>
+            <!-- /.content -->
+        </div>
+
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">ALERTE DANGER !</h4>
+                </div>
+                <div class="modal-body">
+                    <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;
+                        Attention, la suppression de ce diplôme entrainera la suppression de tous les utilisateurs qui sont inscrits sur ce diplôme !</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fermer</button>
+                    <a href="" class="btn btn-outline">Continuer</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block title %}
+Affichage des diplômes
+{% endblock %}
+
+{% block javascripts %}
+    <!-- DataTables -->
+    <script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#diploma').DataTable();
+        });
+
+        $('.btnDanger').click(function () {
+            $('#modal-danger').modal();
+        });
+
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .example-modal .modal {
+            position: relative;
+            top: auto;
+            bottom: auto;
+            right: auto;
+            left: auto;
+            display: block;
+            z-index: 1;
+        }
+
+        .example-modal .modal {
+            background: transparent !important;
+        }
+    </style>
+{% endblock %}

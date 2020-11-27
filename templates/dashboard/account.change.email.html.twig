@@ -1,0 +1,54 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/dashboard.compte.change.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <section class="box">
+            <header>
+                <h2>Changer l'adresse E-Mail</h2>
+            </header>
+            <div class="content">
+
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                {% if form_errors(form) %}
+                    <div class="info-box danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div class="desc">
+                            <p>{{ form_errors(form) }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="passwordAct">
+                        {{ form_label(form.emailAct) }}
+                    </label>
+                    {{ form_widget(form.emailAct, {'attr': {'value': app.user.email } }) }}
+                </div>
+
+                <div class="form-group">
+                    <label for="newpassword">
+                        {{ form_label(form.newEmail) }}
+                    </label>
+                    {{ form_widget(form.newEmail) }}
+                </div>
+
+                <div class="form-group">
+                    <label for="reptPassword">
+                        {{ form_label(form.repeatEmail) }}
+                    </label>
+                    {{ form_widget(form.repeatEmail) }}
+                </div>
+
+                <div class="form-group">
+                    <button>Je valide</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </section>
+    </main>
+{% endblock %}

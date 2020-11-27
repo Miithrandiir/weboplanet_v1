@@ -1,0 +1,262 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block body %}
+    <main>
+        <section class="box">
+            <header>
+                <h2>Entrainement</h2>
+            </header>
+            <div class="content">
+                <div class="alert danger" id="alert">
+                    <h2><i class="fas fa-exclamation"></i> Erreur :</h2>
+                    <div id="message">
+
+                    </div>
+                </div>
+
+                <div class="alert success" id="alert-success">
+                    <h2><i class="fas fa-thumbs-up"></i> Bonne réponse</h2>
+                </div>
+
+                <div class="alert warning" id="alert-info">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Attention</h2>
+                    <p>Changement de question dans 5 secondes</p>
+                </div>
+
+
+                <div class="question">
+                    <h3>Question :</h3>
+                    <p id="question"></p>
+
+                </div>
+
+                <div class="reponse">
+                    <h3>Réponse : </h3>
+                    <form id="reponses">
+
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/prism.js.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.qcm.qcm.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/dashboard.qcm.code.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/prism.min.js') }}"></script>
+    <script>
+        //GENERAL VAR
+        let myData = {{ data|json_encode()|raw }};
+        let questionDone = [];
+        let index = 0;
+        let correction = null;
+
+        //WHEN LOADING IS FINISH
+        $(function() {
+            choseQuestion();
+        });
+
+        function choseQuestion()
+        {
+            $("#alert, #alert-success, #alert-info").hide();
+            if(myData.length === 1) {
+                //Seulemennt 1 élément !
+                index = 0;
+                if(questionDone.find(x => x === index) !== undefined) {
+                    document.location.href = "{{ absolute_url(path('training')) }}";
+                }
+
+                questionDone.push(index);
+            } else {
+                index = Math.floor(Math.random()*(myData.length));
+
+                //Check if index is not in questionDone
+                if(questionDone.find(x => x === index)) {
+                    while(questionDone.find(x => x === index)) {
+                        index = Math.floor(Math.random()*(myData.length));
+                    }
+                }
+
+                questionDone.push(index);
+            }
+
+            let question = myData[index];
+            if(question['isCode'] === true) {
+                //Generation d'un block de code
+                $("#question").html(question['question']);
+
+                let str = "";
+                let consigne = question['code'].split('{ici}');
+                //split
+                str += "<code class=\"language-"+question['type']['language']+"\">\n" +
+                    "                            "+consigne[0].replace('<', '&lt;').replace('>', '&gt;')+"\n" +
+                    "                        </code>";
+
+                str += "<textarea id=\"codeAnswer\"></textarea>";
+
+                str += "<code class=\"language-"+question['type']['language']+"\">\n" +
+                    "                            "+consigne[1]+"\n" +
+                    "                        </code>";
+
+                str += "<button id='submitAnswer'>Je valide &nbsp; <i class=\"fas fa-sync-alt\" id=\"sync\" " +
+                    "style='animation: fa-spin 2s linear infinite;'></i> </button>";
+                $("#reponses").html(str);
+                $("#sync").hide();
+            } else {
+                //QCM ou QCU
+                $("#question").html(question['question']);
+
+                if(question['answer'] !== null) {
+                    let questionStr = "";
+                    for(let i=0;i<question['answer'].length;i++) {
+                        questionStr += "<div class=\"form-group\">\n" +
+                            "<input type='checkbox' value='"+i+"' name='checkbox_'/> " +
+                            ""+question['answer'][i]['answer']+"\n" +
+                            "</div>";
+                    }
+                    questionStr += "<button id='submitAnswer'>Valider</button>";
+                    $("#reponses").html(questionStr);
+
+                }
+            }
+        }
+
+        $(document).on('click', '#next', function (e) {
+            e.preventDefault();
+            choseQuestion();
+        });
+
+        $(document).on('click', '#correction', function(e) {
+            e.preventDefault();
+            $("#reponses").html("<p>Correction</p><code " +
+                "class='language-"+correction[0]+"'>"+correction[1]+"</code>" +
+                "");
+        });
+
+        $(document).on('click', '#submitAnswer', function (e) {
+            e.preventDefault();
+
+            let question = myData[index];
+
+            if(question['isCode'] === true) {
+                let answer = $("#codeAnswer").val();
+                let consigne = question['code'].split('{ici}');
+
+                let code = consigne[0]+answer+consigne[1];
+                $("#sync").show();
+                $.ajax({
+                    url: "{{ path('training_compile') }}",
+                    method: 'post',
+                    data: {'questionId' : question['questionId'], 'code':code}
+                }).done(function (message) {
+                    let data = JSON.parse(message);
+                    $("#sync").hide();
+                    if(data !== null) {
+                        if(data[0] === true) {
+                            $("#alert-success").show();
+                        } else {
+                            $("#message").html(data[1]);
+                            $("#alert").show();
+                            if(data[2] != null) {
+                                if($("#correction").length === 0) {
+                                    $("#reponses").html($("#reponses").html() + "<button id='correction'>Montrer la " +
+                                        "correction" +
+                                        "</button><button id='next'>Question suivante</button>");
+                                }
+
+                                correction = [question['type']['language'], data[2]];
+                            }
+                        }
+                    } else {
+                        $("#message").html("Une erreur est survenue :/");
+                        $("#alert").show();
+                    }
+                });
+            } else {
+                //QCM OR QCU
+                let flag=false; {# Quand le drapeau est à false, il n'y a aucune erreur, quand true alors il y a une erreur #}
+                let nbRep=0;
+                $("input[name=checkbox_]:checked").each(function () {
+                    nbRep++;
+                    if(question['answer'][$(this).val()]['isTrue'] === false) {
+                        flag = true;
+                    }
+                });
+                if(nbRep === 0) {
+                    let isAllFalse = true;
+                    for(let i=0;i<question['answer'].length;i++) {
+                        if(question['answer'][i]['isTrue'] === true) {
+                            isAllFalse=false;
+                        }
+                    }
+
+                    if(!isAllFalse) {
+                        {# ECHEC #}
+                        //Check les bonnes réponses
+                        getRightAnswer(question['answer']);
+
+                    } else {
+                        $("#alert-success").show();
+                    }
+                } else if(nbRep > 0 && !flag) {
+                    $("#alert-success").show();
+                } else {
+                    getRightAnswer(question['answer']);
+                }
+
+                setTimeout(function () {
+                    choseQuestion();
+                }, 5000);
+
+                $("#alert-info").show();
+
+            }
+        });
+
+
+        function getRightAnswer(answer)
+        {
+            //Check les bonnes réponses
+            let goodAns = [];
+            for(let i=0;i<answer.length;i++) {
+                if(answer[i]['isTrue'] === true) {
+                    goodAns.push(answer[i]);
+                }
+            }
+
+            let str = ""; {# MESSAGE #}
+
+            if(goodAns.length > 1) {
+                let strGoodAns = "";
+                goodAns.forEach(function (element) {
+                    strGoodAns += "<li>"+element['answer']+"</li>";
+                });
+
+                str = "<p>Les bonnes réponses étaient :</p>" +
+                    "<ul>" +
+                    strGoodAns+
+                    "</ul>";
+            } else {
+                let strGoodAns = "";
+                goodAns.forEach(function (element) {
+                    strGoodAns += "<li>"+element['answer']+"</li>";
+                });
+
+                str = "<p>La bonne réponse était :</p>" +
+                    "<ul>" +
+                    strGoodAns+
+                    "</ul>";
+            }
+
+            $("#message").html(str);
+            $("#alert").show();
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Édition d'un cours{% endblock %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Cours
+                <small>Affichage</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Cours</a></li>
+                <li class="active">Affichage</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vue sur les cours disponibles sur le site</h3>
+                </div>
+                <div class="box-body">
+                    <table id="course" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom du Chapitre</th>
+                            <th>Nom du Cours</th>
+                            <th>Est Visible ?</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for chap in chapters %}
+                            <tr>
+                                <td> {{ chap.id }}   </td>
+
+                                <td> {{ chap.name }} </td>
+                                <td>
+                                    {% if chap.courseID != null %}
+                                        {{ chap.courseID.name  }}
+                                    {% else %}
+                                        Aucun
+                                    {% endif %}
+                                </td>
+                                <td style="text-align: center">
+                                    {% if chap.isVisible %}
+                                        <i class="fas fa-check green"></i>
+                                    {% else %}
+                                        <i class="fas fa-times red"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('administration_chapter_edit', {'chapter': chap.id}) }}"
+                                       class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <a href="{{ path('administration_chapter_viewPDF', {'chapter': chap.id}) }}" target="_blank"
+                                       class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+            <!-- /.box -->
+
+        </section>
+    </div>
+    <div class="modal modal-danger fade" id="modal-danger">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">ALERTE DANGER !</h4>
+                </div>
+                <div class="modal-body">
+                    <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;
+                        Attention, voulez vous vraiment supprimer ce chapitre ? !</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fermer</button>
+                    <a href="" class="btn btn-outline">Continuer</a>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- DataTables -->
+    <script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#course').DataTable();
+        });
+
+        $('.btnDanger').click(function () {
+            $('#modal-danger').modal();
+        });
+
+    </script>
+
+{% endblock %}

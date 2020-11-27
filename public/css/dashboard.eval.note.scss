@@ -1,0 +1,33 @@
+@import '_vars.scss';
+
+main>.box {
+  & > header > h2 {
+    color: $main-color;
+  }
+
+  & > .content {
+    padding: 10px;
+
+    &>.note {
+      &>.block {
+        margin: 5px auto;
+        &>.question {
+          text-align: center;
+          font-size: 18px;
+        }
+        &>.reponse {
+          display: flex;
+          flex-direction: column;
+          &>label {
+            &>.right {
+              color: #2ecc71;
+            }
+            &>.wrong {
+              color: #e74c3c;
+            }
+          }
+        }
+      }
+    }
+  }
+}

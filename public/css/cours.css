@@ -1,0 +1,126 @@
+#coursPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url("../img/home-office-1867761_1920.jpg");
+  -webkit-background-size: cover;
+  background-size: cover;
+}
+#coursPage > .container {
+  width: 80%;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: row;
+}
+@media screen and (max-width: 1260px) {
+  #coursPage > .container {
+    flex-direction: column;
+  }
+  #coursPage > .container > aside {
+    margin: 20px auto;
+    width: 100% !important;
+    padding: 10px;
+  }
+  #coursPage > .container > .content {
+    width: 100% !important;
+  }
+}
+#coursPage > .container > aside {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  margin-right: 5%;
+  width: 20%;
+  border-right: 1px solid #cfd9db;
+  background: #ecf0f1;
+}
+#coursPage > .container > aside > p {
+  padding: 10px;
+  text-align: center;
+  background: #cfd9db;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #2c3e50;
+}
+#coursPage > .container > aside > ul {
+  list-style: none;
+  width: 100%;
+}
+#coursPage > .container > aside > ul > li {
+  text-align: center;
+  width: inherit;
+}
+#coursPage > .container > aside > ul > li > a {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+  width: inherit;
+  text-decoration: none;
+  color: #1a252f;
+}
+#coursPage > .container > aside > ul > li > a:hover {
+  background: white;
+  cursor: pointer;
+}
+#coursPage > .container > .content {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #ecf0f1;
+  width: 75%;
+  padding: 10px;
+  overflow: hidden;
+}
+#coursPage > .container > .content > article > img {
+  width: 100%;
+  margin: 10px auto;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+#coursPage > .container > .content > article > h1 {
+  text-align: center;
+  color: #2c3e50;
+  background: #cfd9db;
+}
+#coursPage > .container > .content > article > h2 {
+  text-align: center;
+  color: #2c3e50;
+}
+#coursPage > .container > .content > hr {
+  width: 50%;
+  margin: 20px auto;
+}
+#coursPage > .container > .content > .entrainement > h3 {
+  text-align: center;
+  font-weight: 500;
+}
+#coursPage > .container > .content > .entrainement > table {
+  margin: 10px auto;
+}
+#coursPage > .container > .content > .entrainement > table > tbody > tr > td {
+  margin: 20px 0;
+}
+#coursPage > .container > .content > .entrainement > table > tbody > tr > td a {
+  display: flex;
+  padding: 5px;
+  text-decoration: none;
+  background-color: #FFE53B;
+  background-image: linear-gradient(147deg, #FFE53B 0%, #FF2525 74%);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  justify-content: center;
+  color: white;
+  transition: background 500ms;
+}
+#coursPage > .container > .content > .entrainement > table > tbody > tr > td a:hover {
+  background-color: #FFE53B;
+  background-image: linear-gradient(213deg, #FF2525 0%, #FFE53B 74%);
+}
+
+/*# sourceMappingURL=cours.css.map */

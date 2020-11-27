@@ -1,0 +1,35 @@
+@import '_vars.scss';
+
+main>.box>.content {
+  padding: 10px;
+  min-height: 90%;
+  &>table {
+    border-spacing: 0;
+    width: 100%;
+    &>tbody {
+      &>tr {
+        &>td {
+          text-align: center;
+          padding: 5px;
+        }
+      }
+    }
+  }
+}
+
+.warning {
+  background: #f39c12 !important;
+}
+
+.danger {
+  background: #e74c3c !important;
+}
+
+.success, .danger, .warning {
+  &>td {
+    color: white;
+    &>a {
+      color: white;
+    }
+  }
+}

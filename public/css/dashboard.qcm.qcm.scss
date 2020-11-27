@@ -1,0 +1,70 @@
+@import '_vars.scss';
+
+main>.box {
+  &>header>h2 {
+    color: $main-color;
+  }
+  &>.content {
+    padding: 10px;
+    &>div{
+      margin: 20px auto;
+      &>h3 {
+        text-align: center;
+        width: 20%;
+        margin: 10px auto;
+        color: $main-color;
+        text-transform: uppercase;
+      }
+    }
+
+    &>.question {
+      &>p {
+        text-align: center;
+        &:first-letter {
+          text-transform: uppercase;
+        }
+      }
+    }
+
+    &>.reponse {
+      &>form {
+        &>.form-group {
+          flex-direction: row;
+          justify-content: center;
+          &>label {
+            width: auto;
+          }
+          &>input {
+            width: auto;
+            margin: 0 2px;
+          }
+        }
+        &>button {
+          display: flex;
+          justify-content: center;
+          align-content: center;
+          margin: 10px auto;
+          width: 50%;
+          background: $main-color;
+          color: white;
+          border: 1px solid darken($main-color, 10%);
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          border-radius: 3px;
+          padding: 3px;
+          cursor: pointer;
+          transition: background 250ms ease-in;
+          &:hover {
+            background: lighten($main-color, 10%);
+          }
+
+        }
+      }
+    }
+  }
+}
+
+.custom {
+  width: 50%;
+  border: 1px solid green;
+}

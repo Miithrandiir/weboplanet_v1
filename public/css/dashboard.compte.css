@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css?family=Cairo:600");
+main > .box > .content > .stats > h3 {
+  font-family: "Cairo", sans-serif;
+  margin: 0 20px;
+  font-size: 23px;
+  text-transform: uppercase;
+}
+main > .box > .content > .stats > .someStats {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+@media screen and (max-width: 1260px) {
+  main > .box > .content > .stats > .someStats {
+    flex-direction: column;
+  }
+}
+main > .box > .content > .stats > .recap > .form-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+main > .box > .content > .stats > .recap > .form-group > label {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 20px auto;
+}
+main > .box > .content > .stats > .recap > .form-group > label > input[disabled] {
+  text-transform: uppercase;
+  margin: 0 auto;
+  width: 50%;
+  border: 1px solid #cfd9db;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  padding: 5px;
+  background: #dde4e6;
+}
+main > .box > .content > .stats > .recap > .form-group > label > input[disabled]:focus {
+  border: 1px solid #dde4e6;
+}
+@media screen and (max-width: 1260px) {
+  main > .box > .content > .stats > .recap > .form-group {
+    flex-direction: column;
+  }
+  main > .box > .content > .stats > .recap > .form-group > label > input {
+    width: 100% !important;
+  }
+}
+main > .box > .content > .stats > .actions {
+  display: flex;
+}
+main > .box > .content > .stats > .actions > a {
+  width: 45%;
+  background: #cfd9db;
+  padding: 10px;
+  margin: 20px 2.5%;
+  color: #1a252f;
+  text-decoration: none;
+  text-align: center;
+  -webkit-transition: background 500ms ease-in;
+  -moz-transition: background 500ms ease-in;
+  -ms-transition: background 500ms ease-in;
+  -o-transition: background 500ms ease-in;
+  transition: background 500ms ease-in;
+  transition: color 500ms ease-in;
+}
+main > .box > .content > .stats > .actions > a:hover {
+  background: #2c3e50;
+  color: white;
+}
+main > .box > .content > .stats > .solo > a {
+  width: 95%;
+}
+
+/*# sourceMappingURL=dashboard.compte.css.map */

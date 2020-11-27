@@ -1,0 +1,73 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Création d'un diplôme{% endblock %}
+
+{% block body %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Diplôme
+            <small>création</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+            <li><a href="#">Diplôme</a></li>
+            <li class="active">Création</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <!-- Default box -->
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Création d'un diplôme</h3>
+            </div>
+            <div class="box-body">
+                {{ form_start(form) }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form_label(form.diplomaName) }}
+                            {{ form_widget(form.diplomaName, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.users) }}
+                            {{ form_widget(form.users, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                    <!-- /.box-body -->
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+        <!-- /.box -->
+
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.date.extensions.js') }}"></script>
+    <script src="{{ asset('admin/plugins/input-mask/jquery.inputmask.extensions.js') }}"></script>
+    <script>
+    $(function (){
+        //Initialize Select2 Elements
+        $('.select2').select2();
+    });
+    </script>
+{% endblock %}

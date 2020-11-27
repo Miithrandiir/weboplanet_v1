@@ -1,0 +1,93 @@
+@import '_vars.scss';
+@import url('https://fonts.googleapis.com/css?family=Cairo:600');
+
+main>.box>.content>.stats {
+
+  &>h3 {
+    font-family: 'Cairo',sans-serif;
+    margin: 0 20px;
+    font-size: 23px;
+    text-transform: uppercase;
+  }
+
+  &>.someStats {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+
+    @media screen and (max-width:1260px) {
+      flex-direction: column;
+    }
+  }
+
+  &>.recap {
+    &>.form-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &>label {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        margin: 20px auto;
+        &>input[disabled] {
+          text-transform: uppercase;
+          margin: 0 auto;
+          width: 50%;
+          border: 1px solid darken($second-color, 10%);
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          border-radius: 3px;
+          padding: 5px;
+          background: darken($second-color,5%);
+
+          &:focus {
+            border: 1px solid darken($second-color, 5%);
+          }
+        }
+      }
+
+      @media screen and (max-width:1260px) {
+        flex-direction: column;
+
+        &>label>input {
+          width: 100% !important;
+        }
+      }
+
+    }
+  }
+
+  &>.actions {
+    display: flex;
+    &>a {
+      width: 45%;
+      background: darken($second-color, 10%);
+      padding: 10px;
+      margin: 20px 2.5%;
+      color: darken($main-color,10%);
+      text-decoration: none;
+      text-align: center;
+      -webkit-transition: background 500ms ease-in;
+      -moz-transition: background 500ms ease-in;
+      -ms-transition: background 500ms ease-in;
+      -o-transition: background 500ms ease-in;
+      transition: background 500ms ease-in;
+      transition: color 500ms ease-in;
+      &:hover {
+        background: $main-color;
+        color: white;
+      }
+    }
+  }
+
+  &>.solo {
+    &>a {
+      width: 95%;
+    }
+  }
+}

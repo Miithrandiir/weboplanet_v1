@@ -1,0 +1,39 @@
+main > .box {
+  padding: 5px;
+}
+main > .box > .content {
+  min-height: 90%;
+  margin: 10px auto;
+}
+main > .box > .content > .qcms {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+main > .box > .content > .qcms > .qcm {
+  display: flex;
+  flex-direction: row;
+  margin: 7px 0;
+}
+main > .box > .content > .qcms > .qcm > h4 {
+  width: 50%;
+}
+main > .box > .content > .qcms > .qcm > .go > a {
+  background: #8e44ad;
+  padding: 5px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  color: white;
+  text-decoration: none;
+}
+main > .box > .content > .qcms > .qcm > p {
+  width: 30%;
+}
+
+.qcmSearch {
+  background: #f39c12 !important;
+  border: 1px solid #f39c12 !important;
+}
+
+/*# sourceMappingURL=dashboard.qcm.css.map */

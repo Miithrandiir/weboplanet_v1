@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <main id="loginPage">
+        <div class="container">
+            <h2>Première connexion</h2>
+
+            {% if form_errors(form) %}
+                <div class="alert danger">
+                    <h2><i class="fas fa-exclamation"></i> Erreur :</h2>
+                    <p>{{ form_errors(form) }}</p>
+                </div>
+            {% endif %}
+
+            {{ form_start(form) }}
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                {{ form_label(form.username) }}
+                {{ form_widget(form.username) }}
+
+                {{ form_label(form.email) }}
+                {{ form_widget(form.email) }}
+
+                {{ form_label(form.password) }}
+                {{ form_widget(form.password) }}
+
+                {{ form_label(form.passwordC) }}
+                {{ form_widget(form.passwordC) }}
+
+                <button>Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </main>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ asset('js/slider.js') }}"></script>
+    <script src="{{ asset('js/navigation.js') }}"></script>
+{% endblock %}

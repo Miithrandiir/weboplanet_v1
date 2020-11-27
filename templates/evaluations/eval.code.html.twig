@@ -1,0 +1,61 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block body %}
+    <main>
+        <section class="box">
+            <header>
+                <h2>Évaluation | {{ evaluation.name }}</h2>
+            </header>
+            <div class="content">
+                <div class="question">
+                    <h3>Question :</h3>
+                    <p>{{ question.question }}</p>
+                </div>
+
+                <div class="reponse">
+                    <h3>Réponse : </h3>
+                    {{ form_start(form) }}
+                        {% set consigne = question.code|split('{ici}') %}
+                        <code class="language-{{ question.type.language }}">
+                            {{ consigne[0] }}
+                        </code>
+                        <label for="rep" style="display: none;"> Réponse: (Langage CPP) </label>
+                        {{ form_widget(form.answer) }}
+                        <code class="language-cpp">
+                            {{ consigne[1] }}
+                        </code>
+                        <div class="form-group">
+                            <button id="sendEval">Je valide !</button>
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </section>
+
+    </main>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/prism.js.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/dashboard.qcm.code.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/prism.min.js') }}"></script>
+    <script>
+        $("#sendEval").click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '{{ path('dashboard_evaluations_save_data') }}',
+                method: 'post',
+                data : {'evalQId':{{ question.id }},'responses':$("#form_answer").val()}
+            }).done(function (msg) {
+                if(msg === true) {
+                    location.reload();
+                }
+            })
+        });
+    </script>
+
+{% endblock %}

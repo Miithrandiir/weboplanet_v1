@@ -1,0 +1,25 @@
+main > .box > header > h2 {
+  color: #2c3e50;
+}
+main > .box > .content {
+  padding: 10px;
+}
+main > .box > .content > .note > .block {
+  margin: 5px auto;
+}
+main > .box > .content > .note > .block > .question {
+  text-align: center;
+  font-size: 18px;
+}
+main > .box > .content > .note > .block > .reponse {
+  display: flex;
+  flex-direction: column;
+}
+main > .box > .content > .note > .block > .reponse > label > .right {
+  color: #2ecc71;
+}
+main > .box > .content > .note > .block > .reponse > label > .wrong {
+  color: #e74c3c;
+}
+
+/*# sourceMappingURL=dashboard.eval.note.css.map */

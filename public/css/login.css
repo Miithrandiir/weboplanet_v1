@@ -1,0 +1,85 @@
+#loginPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: url("../img/home-office-1867761_1920.jpg");
+  -webkit-background-size: cover;
+  background-size: cover; }
+  #loginPage > .container {
+    width: 30%;
+    margin: 20px auto;
+    padding: 20px auto;
+    background: #ecf0f1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: 3px -3px 5px -2px #bdc3c7;
+    -moz-box-shadow: 3px -3px 5px -2px #bdc3c7;
+    box-shadow: 3px -3px 5px -2px #bdc3c7; }
+    #loginPage > .container > h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin: 10px auto; }
+    #loginPage > .container > form {
+      display: flex;
+      flex-direction: column; }
+      #loginPage > .container > form > label {
+        margin: 10px 10px;
+        display: flex;
+        flex-direction: column;
+        color: #2c3e50; }
+        #loginPage > .container > form > label > input {
+          border: 1px solid #bdc3c7;
+          background: #ecf0f1;
+          padding: 10px;
+          color: #2c3e50;
+          font-weight: bold; }
+      #loginPage > .container > form > input {
+        border: 1px solid #bdc3c7;
+        background: #ecf0f1;
+        padding: 10px;
+        color: #2c3e50;
+        font-weight: bold;
+        margin: 0 10px; }
+      #loginPage > .container > form > button, #loginPage > .container > form > a {
+        margin: 10px auto;
+        padding: 10px;
+        cursor: pointer;
+        background: #9b59b6;
+        border: none;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        color: white;
+        font-size: 16px;
+        -webkit-transition: background 500ms ease-in-out;
+        -moz-transition: background 500ms ease-in-out;
+        -ms-transition: background 500ms ease-in-out;
+        -o-transition: background 500ms ease-in-out;
+        transition: background 500ms ease-in-out; }
+      #loginPage > .container > form > a {
+        text-decoration: none;
+        background: #e67e22; }
+        #loginPage > .container > form > a:hover {
+          background: #e98b39; }
+      #loginPage > .container > form > button:hover {
+        background: #a66bbe; }
+    @media screen and (max-width: 1000px) {
+      #loginPage > .container {
+        width: 50%; } }
+    @media screen and (max-width: 700px) {
+      #loginPage > .container {
+        width: 75%; } }
+    @media screen and (max-width: 500px) {
+      #loginPage > .container {
+        width: 97%; }
+        #loginPage > .container .alert {
+          width: 100%;
+          text-align: center;
+          -webkit-border-radius: 0;
+          -moz-border-radius: 0;
+          border-radius: 0; } }
+
+/*# sourceMappingURL=login.css.map */

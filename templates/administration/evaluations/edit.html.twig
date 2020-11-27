@@ -1,0 +1,653 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block title %}Édition d'une évaluation{% endblock %}
+
+{% block body %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Évaluation
+                <small>édition</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Évaluation</a></li>
+                <li class="active">édition</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Édition d'une évaluation</h3>
+                </div>
+                <div class="box-body">
+                    {{ form_start(form) }}
+                    <div class="box-body">
+                        <div class="form-group">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class' : 'form-control' }}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.chapter) }}
+                            {{ form_widget(form.chapter, {'attr': {'class' : 'form-control select2'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.isEval) }}
+                            {{ form_label(form.isEval) }}
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </div>
+                    <!-- /.box-body -->
+                    {{ form_end(form) }}
+
+                </div>
+            </div>
+            <!-- /.box -->
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vue sur les questions</h3>
+                    <button class="pull-right btn btn-success addQ">Ajouter une question</button>
+                </div>
+                <div class="box-body">
+                    <div class="box-body">
+                        <table id="questions" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom de la question</th>
+                                <th>Points que l'on obtient</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for evaluationQuestion in evaluation.evaluationsQuestions %}
+                                    <tr>
+                                        <td>{{ evaluationQuestion.id }}</td>
+                                        <td>{{ evaluationQuestion.question }}</td>
+                                        <td><span class="label label-info pts" data-pts="{{ evaluationQuestion.points }}">{{ evaluationQuestion.points }}</span></td>
+                                        <td>
+                                            <button class="btn btn-warning editQuestion" data-evalQId="{{ evaluationQuestion.id }}"><i class="fas fa-edit"></i></button>
+                                            <button class="btn btn-danger deleteQuestion" data-question="{{ evaluationQuestion.id }}"><i class="fas fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" style="text-align: right;">Total des points :</td>
+                                    <td colspan="1"><span class="label label-success" id="totalPts"></span></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            <!-- /.box -->
+            </div>
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vue sur les groupes</h3>
+                    <button class="pull-right btn btn-success addG">Ajouter un groupe</button>
+                </div>
+                <div class="box-body">
+                    <div class="box-body">
+                        <table id="groups" class="table table-bordered table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom des groupes</th>
+                                <th>Date de commencement</th>
+                                <th>Date de fin</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for groupes in evaluation.evaluationsGroups %}
+                                <tr>
+                                    <td>{{ groupes.id }}</td>
+                                    <td>
+                                        <ul>
+                                        {% for groupe in groupes.groupID %}
+                                                <li>{{ groupe.name }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td>{{ groupes.dateStart|date('d-m-Y H:i:s') }}</td>
+                                    <td>{{ groupes.dateEnd|date('d-m-Y H:i:s') }}</td>
+                                    <td><button class="btn btn-danger removeGroupes" data-evalGroupId="{{ groupes.id }}"><i class="fas fa-trash-alt"></i></button></td>
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <div class="modal modal-default fade" id="addQuestions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="fas fa-plus" aria-hidden="true"></i>
+                        Ajout d'une question</h4>
+                </div>
+                {{ form_start(addQuestion) }}
+                <div class="modal-body">
+                        <div class="form-group">
+                            {{ form_label(addQuestion.nameQ) }}
+                            {{ form_widget(addQuestion.nameQ, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(addQuestion.points) }}
+                            {{ form_widget(addQuestion.points, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(addQuestion.correctionRules) }}
+                            {{ form_widget(addQuestion.correctionRules, {'attr': {'class' : 'form-control select2', 'style': 'width: 100%'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(addQuestion.testedKeys) }}
+                            {{ form_widget(addQuestion.testedKeys, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(addQuestion.type) }}
+                            {{ form_widget(addQuestion.type, {'attr': {'class' : 'form-control select2', 'style': 'width: 100%'}}) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(addQuestion.code) }}
+                            {{ form_widget(addQuestion.code, {'attr': {'class' : 'form-control'}}) }}
+                        </div>
+
+                        <div class="answer">
+                            {{ form_row(addAnswer.answer) }}
+                        </div>
+                        <div id="actionsAnswer">
+                        <button class="btn btn-default" id="addAnswer" style="width: 100%;" data-count="0" data-list-selector="#form_answer"><i class="fas fa-plus" aria-hidden="true"></i> Ajouter une réponse</button>
+
+                        <button class="btn btn-danger" id="deleteAnswer" style="width: 100%;" data-count="0" data-list-selector="#form_answer"><i class="fas fa-minus" aria-hidden="true"></i> Supprimer la dernière réponse</button>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                    <button type="reset" class="btn btn-warning pull-left">Supprimer</button>
+                    <button type="button" class="btn btn-success pull-right" id="send" data-dismiss="modal">Envoyer</button>
+                </div>
+                {{ form_end(addQuestion) }}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal modal-default fade" id="addGroup">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="fas fa-plus" aria-hidden="true"></i>
+                        Ajout de groupe</h4>
+                </div>
+                {{ form_start(addGroup) }}
+
+                <div class="modal-body">
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <h4><i class="icon fa fa-info"></i> Remarque !</h4>
+                        Attention les groupes qui sont déjà présent dans l'évaluation ne seront pas inscrit.
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(addGroup.groups) }}
+                        {{ form_widget(addGroup.groups, {'attr': {'class' : 'form-control select2', 'style' : 'width: 100%'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addGroup.date) }}
+                        {{ form_widget(addGroup.date, {'attr': {'class' : 'form-control'}}) }}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                    <button type="button" class="btn btn-success pull-right" id="sendGroup" data-dismiss="modal">Envoyer</button>
+                </div>
+                {{ form_end(addGroup) }}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal modal-default fade" id="editQuestions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><i class="fas fa-plus" aria-hidden="true"></i>
+                        Édition d'une question</h4>
+                </div>
+                {{ form_start(addQuestion2) }}
+                <div class="modal-body">
+                    <input type="hidden" id="Eid" value=""/>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.EnameQ) }}
+                        {{ form_widget(addQuestion2.EnameQ, {'attr': {'class' : 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.Epoints) }}
+                        {{ form_widget(addQuestion2.Epoints, {'attr': {'class' : 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.EcorrectionRules) }}
+                        {{ form_widget(addQuestion2.EcorrectionRules, {'attr': {'class' : 'form-control select2', 'style': 'width: 100%'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.EtestedKeys) }}
+                        {{ form_widget(addQuestion2.EtestedKeys, {'attr': {'class' : 'form-control'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.Etype) }}
+                        {{ form_widget(addQuestion2.Etype, {'attr': {'class' : 'form-control select2', 'style': 'width: 100%'}}) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(addQuestion2.Ecode) }}
+                        {{ form_widget(addQuestion2.Ecode, {'attr': {'class' : 'form-control'}}) }}
+                    </div>
+
+                    <div class="answer">
+                        {{ form_row(addAnswer2.Eanswer) }}
+                    </div>
+                    <div id="actionsAnswer">
+                        <button class="btn btn-default" id="addEAnswer"  style="width: 100%;" data-count="0" data-list-selector="#form_Eanswer"><i class="fas fa-plus" aria-hidden="true"></i> Ajouter une réponse</button>
+
+                        <button class="btn btn-danger" id="deleteEAnswer" style="width: 100%;" data-list-selector="#form_Eanswer"><i class="fas fa-minus" aria-hidden="true"></i> Supprimer la dernière réponse</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Fermer</button>
+                    <button type="reset" class="btn btn-warning pull-left">Supprimer</button>
+                    <button type="button" class="btn btn-success pull-right" id="sendE" data-dismiss="modal">Envoyer</button>
+                </div>
+                {{ form_end(addQuestion2) }}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('admin/bower_components/select2/dist/css/select2.min.css') }}"/>
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="{{ asset('admin/plugins/iCheck/all.css') }}">
+
+    <style>
+        #actionsAnswer > button {
+            margin: 5px auto;
+        }
+        .answer {
+            padding: 5px;
+            background: whitesmoke;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('admin/bower_components/select2/dist/js/select2.full.min.js') }}"></script>
+    <!-- iCheck 1.0.1 -->
+    <script src="{{ asset('admin/plugins/iCheck/icheck.min.js') }}"></script>
+    <!-- date-range-picker -->
+    <script src="{{ asset('admin/bower_components/moment/min/moment.min.js') }}"></script>
+    <script src="{{ asset('admin/bower_components/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+
+    <script>
+        $(function (){
+            //Initialize Select2 Elements
+            $('.select2').select2();
+            hideCode();
+            calcPts();
+        });
+
+        $(".addQ").click(function (e) {
+            e.preventDefault();
+            $('#addQuestions').modal();
+        });
+
+        $(".addG").click(function (e) {
+            e.preventDefault();
+            $('#addGroup').modal();
+        });
+
+        $("#form_date").daterangepicker({ timePicker: true, timePickerIncrement: 30, timePicker24Hour: true, format: 'YYYY-MM-DD HH:mm:ss' });
+
+
+        $("#form_type").change(function (e) {
+            if($(this).val() !== "") {
+                showCode();
+            } else {
+                hideCode();
+            }
+        });
+
+        function hideCode() {
+            $("#form_code").hide();
+            $('label[for="form_code"]').hide();
+        }
+
+        function showCode() {
+            $("#form_code").show();
+            $('label[for="form_code"]').show();
+        }
+
+        $("#addAnswer").click(function (e) {
+            e.preventDefault();
+
+            let proto_checkbox = "<div><label for=\"form_isTrue___name__\" class=\"required\">Est-ce une bonne réponse ?</label><input type=\"checkbox\" id=\"form_isTrue___name__\" name=\"form[isTrue][__name__]\" required=\"required\" class=\"icheckbox_minimal-blue\"/></div>";
+
+            let list = $($(this).data('list-selector'));
+
+            let counter = $(this).data('count');
+
+            if(counter > 0 && $("#form_type").val() !== "") {
+                //on regarde si le compteur est supérieur à 0 et si la valeur est différente de null, cela voudra dire que l'on veut mettre plusieurs algorithme en tant que réponse ce qui n'est pas possible
+                return;
+            }
+
+            let newAnswer = list.data('prototype');
+
+            newAnswer = newAnswer.replace(/__name__label__/g, "Réponse "+(counter+1));
+            newAnswer = newAnswer.replace(/__name__/g, counter);
+            proto_checkbox = proto_checkbox.replace(/__name__/g, counter);
+
+
+            counter++;
+
+            $(this).data('count', counter);
+
+            list.append(newAnswer);
+            list.append(proto_checkbox);
+
+        });
+
+        $("#deleteAnswer").click(function (e) {
+            e.preventDefault();
+
+            let counter = $("#addAnswer").data('count');
+
+            if(counter-1 >= 0) {
+
+                $("#form_answer_" + (counter-1)).parent().remove();
+                $("#form_isTrue_" + (counter-1)).parent().remove();
+
+                counter--;
+
+                $("#addAnswer").data('count', counter);
+            }
+
+        });
+
+        $("#addEAnswer").click(function (e) {
+            e.preventDefault();
+            addEAnswer($(this));
+        });
+
+        $("#deleteEAnswer").click(function (e) {
+            e.preventDefault();
+            deleteEAnswer($(this));
+        });
+
+        function addEAnswer(obj)
+        {
+            let proto_checkbox = "<div><label for=\"form_EisTrue___name__\" class=\"required\">Est-ce une bonne réponse ?</label><input type=\"checkbox\" id=\"form_EisTrue___name__\" name=\"form[isTrue][__name__]\" required=\"required\" class=\"icheckbox_minimal-blue\"/></div>";
+
+            let list = $(obj.data('list-selector'));
+
+            let counter = obj.data('count');
+
+            if(counter > 0 && $("#form_Etype").val() !== "") {
+                //on regarde si le compteur est supérieur à 0 et si la valeur est différente de null, cela voudra dire que l'on veut mettre plusieurs algorithme en tant que réponse ce qui n'est pas possible
+                return;
+            }
+
+            let newAnswer = list.data('prototype');
+
+            newAnswer = newAnswer.replace(/__name__label__/g, "Réponse "+(counter+1));
+            newAnswer = newAnswer.replace(/__name__/g, counter);
+            proto_checkbox = proto_checkbox.replace(/__name__/g, counter);
+
+
+            counter++;
+
+            obj.data('count', counter);
+
+            list.append(newAnswer);
+            list.append(proto_checkbox);
+        }
+
+        function deleteEAnswer(object)
+        {
+            let counter = $("#addEAnswer").data('count');
+
+            if(counter-1 >= 0) {
+
+                $("#form_Eanswer_" + (counter-1)).parent().remove();
+                $("#form_EisTrue_" + (counter-1)).parent().remove();
+
+                counter--;
+
+                $("#addEAnswer").data('count', counter);
+            }
+        }
+
+        $("#send").click(function (e) {
+            e.preventDefault();
+
+            let reponses = [];
+
+            for(let i=0;i<$("#addAnswer").data('count');i++) {
+                let temp= [];
+                temp[0] = $("#form_answer_"+i).val();
+                temp[1] = $("#form_isTrue_"+i).is(':checked');
+
+                reponses.push(temp);
+            }
+
+            $.ajax({
+                url : "{{ path('administration_evaluation_add_question') }}",
+                method: "post",
+                data: {
+                    evalId: {{ evaluation.id }},
+                    question : $("#form_nameQ").val(),
+                    points: $("#form_points").val(),
+                    typeId: $("#form_type").val(),
+                    code: $("#form_code").val(),
+                    answer: reponses,
+                    correctionRules : $("#form_correctionRules").val(),
+                    testedKeys : $("#form_testedKeys").val()
+                }
+            }).done(function (msg) {
+                if(msg != false) {
+                    $("#questions").append("<tr>" +
+                        "<td>"+msg+"</td>" +
+                        "<td>"+$("#form_nameQ").val()+"</td>" +
+                        "<td><span class=\"label label-info pts\" data-pts=\""+$("#form_points").val()+"\">"+$("#form_points").val()+"</span></td>" +
+                        "<td>" +
+                        "<button class=\"btn btn-warning\"><i class=\"fas fa-edit\"></i></button>\n" +
+                        "<button class=\"btn btn-danger deleteQuestion\" data-question=\""+msg+"\"><i class=\"fas fa-trash-alt\"></i></button>" +
+                        "</td>" +
+                        "</tr>");
+                    calcPts();
+                }
+            })
+        });
+
+        function calcPts() {
+            let totalPts = 0;
+            $(".pts").each(function () {
+                totalPts += $(this).data('pts');
+            });
+
+            $("#totalPts").html('').append(totalPts);
+        }
+
+        $("body").on('click', '.deleteQuestion',
+            function (e) {
+            e.preventDefault();
+
+            let obj = $(this);
+
+            $.ajax({
+                url: "{{ path('administration_evaluation_delete_question') }}",
+                method: "post",
+                data: {questionId: $(this).data('question')}
+            }).done(function (msg) {
+                console.log(msg);
+                if(msg == true) {
+                    obj.parent().parent().remove();
+                    calcPts();
+                }
+            })
+        }).on('click', '.removeGroupes',
+            function (e) {
+            e.preventDefault();
+
+            let obj = $(this);
+
+            $.ajax({
+                url: "{{ path('administration_evaluation_delete_group') }}",
+                method: "post",
+                data: {evalGroupId: $(this).data('evalgroupid')}
+            }).done(function (msg) {
+                if(msg == true) {
+                    obj.parent().parent().remove();
+                }
+            })
+        }).on('click', '.editQuestion',
+            function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: "{{ path('administration_evaluations_get_question') }}",
+                method: 'post',
+                data: {evaluationQuestionId: $(this).data('evalqid')}
+            }).done(function (msg) {
+                let data = JSON.parse(msg);
+                $("#editQuestions").modal();
+                $("#form_EnameQ").val(data['name']);
+                $("#form_Epoints").val(data['points']);
+                $("#form_EcorrectionRules").val(data['rule']);
+                $("#form_EtestedKeys").val(data['testedKeys']);
+                $("#form_Etype").val(data['codeType']);
+                $("#form_Ecode").val(data['code']);
+                $("#Eid").val(data['id']);
+                //Remise à zéro
+                $("#form_Eanswer").html("");
+                $("#addEAnswer").data('count', 0);
+                for(let i=0;i<data['answers'].length;i++) {
+                    addEAnswer($("#addEAnswer"));
+                    $("#form_Eanswer_"+i).val(data['answers'][i][2]).attr('data-id',data['answers'][i][0]);
+                    $("#form_EisTrue_"+i).prop('checked', data['answers'][i][1]);
+                }
+            })
+
+        });
+
+        $("#sendGroup").click(function (e) {
+           e.preventDefault();
+
+           $.ajax({
+               url: "{{ path('administration_evaluation_add_group') }}",
+               method: "post",
+               data: {"dateDeb" : $("#form_date").data('daterangepicker').startDate.format("YYYY-MM-DD HH:mm"),"dateFin" : $("#form_date").data('daterangepicker').endDate.format("YYYY-MM-DD HH:mm"), "groups" : $("#form_groups").val(), evalId : {{ evaluation.id }} }
+           }).done(function (msg) {
+               if(msg != false) {
+                   try {
+                       let data = JSON.parse(msg);
+                       let html="<ul>";
+
+                       for(let i=0;i<data[1].length;i++) {
+                           html = html+"<li>"+data[1][i]+"</li>";
+                       }
+                       html = html+"</ul>";
+                       $("#groups").append("<tr>" +
+                           "<td>"+data[0]+"</td>" +
+                           "<td>"+html+"</td>" +
+                           "<td>"+$("#form_date").data('daterangepicker').startDate.format("YYYY-MM-DD HH:mm")+"</td>" +
+                           "<td>"+$("#form_date").data('daterangepicker').endDate.format("YYYY-MM-DD HH:mm")+"</td>" +
+                           "<td><button class=\"btn btn-danger removeGroupes\" data-evalGroupId=\""+data[0]+"\"><i class=\"fas fa-trash-alt\"></i></button></td>" +
+                           "</tr>");
+                   } catch (e) {
+                        console.log(e.toString());
+                   }
+
+               }
+           })
+        });
+
+        $("#sendE").click(function (e) {
+            e.preventDefault();
+
+            let reponses = [];
+
+            for(let i=0;i<$("#addEAnswer").data('count');i++) {
+                let temp= [];
+                temp[0] = $("#form_Eanswer_"+i).val();
+                temp[1] = $("#form_Eanswer_"+i).data('id');
+                temp[2] = $("#form_EisTrue_"+i).is(':checked');
+
+                reponses.push(temp);
+            }
+
+            $.ajax({
+                url: "{{ path('administration_evaluation_edit_question') }}",
+                method: 'post',
+                data: {
+                    question: $("#form_EnameQ").val(),
+                    points: $("#form_Epoints").val(),
+                    typeId: $("#form_Etype").val(),
+                    code: $("#form_Ecode").val(),
+                    answers: reponses,
+                    correctionRules: $("#form_EcorrectionRules").val(),
+                    testedKeys: $("#form_EtestedKeys").val(),
+                    questionId: $("#Eid").val(),
+                }
+            }).done(function (msg) {
+                console.log(msg);
+            })
+        });
+
+    </script>
+{% endblock %}

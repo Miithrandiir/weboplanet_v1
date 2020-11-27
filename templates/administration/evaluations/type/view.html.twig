@@ -1,0 +1,125 @@
+{% extends 'administration/base.html.twig' %}
+
+{% block body %}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Types d'évaluations
+                <small>Affichage</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Tableau de bord</a></li>
+                <li><a href="#">Types d'évaluations</a></li>
+                <li class="active">Affichage</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- Default box -->
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Vue sur les différnts types d'évaluations</h3>
+                </div>
+                <div class="box-body">
+                    <table id="evalType" class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Langage</th>
+                            <th>Commande</th>
+                            <th>Mots bannis</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for type in evalTypes %}
+                            <tr>
+                                <td>{{ type.id }}</td>
+                                <td>{{ type.name }}</td>
+                                <td>{{ type.language }}</td>
+                                <td>{{ type.command }}</td>
+                                <td>
+                                    <ul>
+                                    {% for words in type.bannedWords %}
+                                        <li>{{ words }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>
+                                    <a href="{{ path('administration_evaluations_type_edit', {'id': type.id}) }}" class="btn btn-warning"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                    <button class="btn btn-danger deleteEvalType" data-evalType="{{ type.id }}"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <!-- /.box -->
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+
+    <div class="modal modal-danger fade" id="err_type">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Une erreur est survenue !</h4>
+                </div>
+                <div class="modal-body">
+                    <p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;
+                        <span id="err_text"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block title %}
+    Affichage des types d'évaluations
+{% endblock %}
+
+{% block javascripts %}
+    <!-- DataTables -->
+    <script src="{{ asset('admin/bower_components/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script>
+        $(function () {
+            $('#evalType').DataTable();
+        });
+
+        $(".deleteEvalType").click(function (e) {
+            e.preventDefault();
+            console.log($(this).data('evaltype'));
+            $.post({
+                url: '{{ path('administration_evaluations_type_delete') }}',
+                method: 'post',
+                data: {'evalTypeId': $(this).data('evaltype')}
+            }).done(function (msg) {
+                if(msg[0] === false) {
+                    if(msg[1] === "err:questions") {
+                        $("#err_text").html("").append("Il reste des questions avec ce type d'évaluation, en conséquence il est impossible de supprimer ce type d'évaluation");
+                        $("#err_type").modal();
+                    }
+                } else {
+                    $(this).parent().parent().remove();
+                }
+            });
+        });
+
+    </script>
+{% endblock %}
